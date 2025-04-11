@@ -1,0 +1,194 @@
+
+h2,
+h4 {
+  color: var(--color-two);
+}
+
+/* Navbar styles */
+.navbar {
+  background-color: var(--color-one);
+  /* Đổi màu nền navbar */
+  border-radius: 20px;
+  /* Bo tròn các góc của navbar */
+  padding: 20px 30px;
+  /* Thêm khoảng cách bên trong navbar */
+  font-size: 19px;
+  /* Thay đổi kích thước chữ */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  /* Thêm bóng đổ cho navbar */
+  display: flex;
+  
+}
+.navbar-nav .nav-link {
+  color: rgb(225, 215, 215) !important;
+  margin-right: 10px;
+  display: flex;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--color-two) !important;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  /* Thay đổi kích thước chữ cho brand */
+  font-weight: bold;
+  /* Làm đậm chữ cho brand */
+}
+.navbar-brand i{
+  color: var(--color-two);
+}
+
+   
+.form-control::placeholder {
+  color: #e9d9d9;
+}
+
+.form-control {
+  background-color: #565050;
+  border: none;
+  border-radius: 20px;
+  width: 70%;
+  display: flex;
+  margin: 10px;
+  
+  
+}
+
+.dropdown-menu {
+  background-color: #797171;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.dropdown-item {
+  color: #fff;
+  padding: 10px 15px;
+}
+
+.dropdown-item:hover {
+  background-color:var(--color-two);
+  color: #ebd0d0;
+}
+
+/* Hero Section */
+.movie-item {
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s;
+}
+
+.movie-item:hover {
+  transform: scale(1.03);
+}
+
+.movie-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.movie-item .title {
+  padding: 10px;
+  text-align: center;
+}
+
+.movie-item .title a {
+  color:var(--color-text);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.list-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+
+#hero-section {
+  position: relative;
+}
+
+#hero-carousel .item {
+  position: relative;
+  height: 500px;
+  color: var(--color-text);
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+#hero-carousel .overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+}
+
+#hero-carousel h3 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+#hero-carousel p {
+  font-size: 16px;
+  max-width: 60%;
+}
+
+/* Căn chỉnh mũi tên trái/phải cho owl carousel */
+/* Căn chỉnh mũi tên trái/phải cho owl carousel */
+#hero-carousel .owl-nav {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  pointer-events: none;
+}
+
+#hero-carousel .owl-nav button.owl-prev,
+#hero-carousel .owl-nav button.owl-next {
+  background: transparent !important;
+  border: none !important;
+  padding: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  pointer-events: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style icon mũi tên bên trong */
+#hero-carousel .owl-prev-icon,
+#hero-carousel .owl-next-icon {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  line-height: 50px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: var(--color-text);
+  font-size: 26px;
+  text-align: center;
+  transition: 0.3s ease;
+}
+
+/* Hover icon mũi tên */
+#hero-carousel .owl-prev-icon:hover,
+#hero-carousel .owl-next-icon:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--color-main);
+}
