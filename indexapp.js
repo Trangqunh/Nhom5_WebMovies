@@ -152,3 +152,73 @@ document.querySelectorAll('.nav-link').forEach(link => {
 $(document).ready(() => {
     fetchHeroMovies();
 });
+
+
+// Function to fetch latest cartoon movies
+async function fetchLatestCartoon() {
+ 
+    const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=16`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.results && data.results.length > 0) {
+            const container = $('#cartoon-carousel');
+            container.empty(); // Clear any existing content
+
+            // Add each cartoon movie to the carousel
+            data.results.forEach(movie => {
+                const item = createMediaCard(movie, 'movie');
+                container.append(item);
+            });
+
+            // Initialize Owl Carousel for cartoon section
+            initCartoonCarousel();
+        }
+    } catch (error) {
+        console.error('Error fetching cartoon movies:', error);
+    }
+}
+
+// Initialize the cartoon carousel
+function initCartoonCarousel() {
+    $('#cartoon-carousel').owlCarousel({
+        items: 5,
+        loop: true,
+        margin: 15,
+        nav: false,
+        dots: false,
+        autoplay: false,
+        responsive: {
+            0: {
+                items: 1
+            },
+            576: {
+                items: 2
+            },
+            768: {
+                items: 3
+            },
+            992: {
+                items: 4
+            },
+            1200: {
+                items: 5
+            }
+        }
+    });
+
+    // Custom navigation buttons
+    $('.nav-prev-btn').click(function () {
+        $('#cartoon-carousel').trigger('prev.owl.carousel');
+    });
+
+    $('.nav-next-btn').click(function () {
+        $('#cartoon-carousel').trigger('next.owl.carousel');
+    });
+}
+
+$(document).ready(() => {
+    fetchLatestCartoon();
+});
