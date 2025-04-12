@@ -8,17 +8,12 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
     />
-
     <!-- Bootstrap 5 CSS -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
     />
-
     <!-- Owl Carousel CSS -->
     <link
       rel="stylesheet"
@@ -28,43 +23,31 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/assets/owl.theme.default.min.css"
     />
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/indexstyle.css" />
-    <link rel="stylesheet" href="css/tvseries.css">
+    <link rel="stylesheet" href="css/tvseries.css" />
   </head>
 
   <body>
-    <!-- 1. Navbar -->
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container">
         <a class="navbar-brand" href="indexmovie.html">
           <i class="fa-solid fa-film"></i>
           <span>Movie<span style="color: #f8c100">Time</span></span>
         </a>
-        <!-- Nút bật/tắt menu cho mobile -->
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarContent"
-          aria-controls="navbarContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a
-                class="nav-link"
-                aria-current="page"
-                href="indexmovie.html"
-                >Home</a
-              >
+              <a class="nav-link" href="indexmovie.html">Home</a>
             </li>
             <li class="nav-item dropdown">
               <a
@@ -73,32 +56,20 @@
                 id="genreDropdown"
                 role="button"
                 data-bs-toggle="dropdown"
-                aria-expanded="false"
+                >Genre</a
               >
-                Genre
-              </a>
-              <ul
-                class="dropdown-menu"
-                aria-labelledby="genreDropdown"
-                id="genre-menu"
-              >
-                <!-- JS sẽ thêm thể loại vào đây -->
-              </ul>
+              <ul class="dropdown-menu" id="genre-menu"></ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="#" id="tv-series-link">TV Series</a>
+              <a class="nav-link active" href="#">TV Series</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" id="anime-link">Anime</a>
-            </li>
+            <li class="nav-item"><a class="nav-link" href="#">Anime</a></li>
           </ul>
-          <form class="d-flex" role="search" id="search-form">
+          <form class="d-flex" role="search">
             <input
               class="form-control me-2"
               type="search"
               placeholder="Search movies..."
-              aria-label="Search"
-              id="search-input"
             />
             <button class="btn btn-outline-light" type="submit">Search</button>
           </form>
@@ -106,19 +77,13 @@
       </div>
     </nav>
 
-    <!--Khối chứa phần hero section và list film-->
     <div class="container py-4">
-      <!-- 2.Hero Section -->
       <section id="hero-section" class="my-4">
-        <div class="owl-carousel owl-theme" id="hero-carousel">
-          <!-- Các item phim sẽ được thêm bằng JS -->
-        </div>
+        <div class="owl-carousel owl-theme" id="hero-carousel"></div>
       </section>
-      <!--3.PHẦN HIỂN THỊ PHIM THEO DANH MỤC-->
       <div id="category-sections"></div>
     </div>
 
-    <!-- 4.Footer -->
     <footer class="footer-section">
       <div class="container">
         <div class="footer-content">
@@ -126,16 +91,14 @@
             <div class="col-lg-3 col-md-6">
               <div class="footer-widget">
                 <div class="footer-logo">
-                  <a class="navbar-brand" href="indexmovie.html">
-                    <!-- Thêm link logo footer -->
-                    <i class="fa-solid fa-film"></i>
-                    <span>Movie<span style="color: #f8c100">Time</span></span>
+                  <a class="navbar-brand" href="indexmovie.html"> <!-- Thêm link logo footer -->
+                     <i class="fa-solid fa-film"></i>
+                     <span>Movie<span style="color:#F8C100;">Time</span></span>
                   </a>
                 </div>
                 <p>
-                  Your ultimate destination for movies, TV shows, and
-                  entertainment content. Watch the latest releases and classics
-                  anytime, anywhere.
+                  Your ultimate destination for movies, TV shows, and entertainment content. Watch the latest releases and
+                  classics anytime, anywhere.
                 </p>
                 <div class="social-icons">
                   <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -150,12 +113,9 @@
                 <h4>Quick Links</h4>
                 <ul class="footer-links">
                   <li><a href="indexmovie.html">Home</a></li>
-                  <li><a href="#">Movies</a></li>
-                  <!-- Cần link đến trang Movies nếu có -->
-                  <li><a href="#">TV Series</a></li>
-                  <!-- Cần link đến trang TV Series nếu có -->
-                  <li><a href="#">Anime</a></li>
-                  <!-- Cần link đến trang Anime nếu có -->
+                  <li><a href="#">Movies</a></li> <!-- Cần link đến trang Movies nếu có -->
+                  <li><a href="#">TV Series</a></li> <!-- Cần link đến trang TV Series nếu có -->
+                  <li><a href="#">Anime</a></li> <!-- Cần link đến trang Anime nếu có -->
                   <li><a href="#">New Releases</a></li>
                 </ul>
               </div>
@@ -164,7 +124,7 @@
               <div class="footer-widget">
                 <h4>Genres</h4>
                 <ul class="footer-links" id="footer-genre-links">
-                  <!-- JS có thể thêm các link genre vào đây -->
+                   <!-- JS có thể thêm các link genre vào đây -->
                   <li><a href="#">Action</a></li>
                   <li><a href="#">Comedy</a></li>
                   <li><a href="#">Drama</a></li>
@@ -176,15 +136,10 @@
             <div class="col-lg-3 col-md-6">
               <div class="footer-widget">
                 <h4>Newsletter</h4>
-                <p>
-                  Subscribe to our newsletter for updates on new releases and
-                  promotions.
-                </p>
+                <p>Subscribe to our newsletter for updates on new releases and promotions.</p>
                 <form class="newsletter-form">
                   <input type="email" placeholder="Your email address" />
-                  <button type="submit" class="btn btn-warning">
-                    Subscribe
-                  </button>
+                  <button type="submit" class="btn btn-warning">Subscribe</button>
                 </form>
               </div>
             </div>
@@ -207,13 +162,12 @@
       </div>
     </footer>
 
-    <!-- jQuery -->
+    <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
-    <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Owl Carousel JS -->
     <script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js"></script>
-    <!-- Custom JavaScript -->
+
+    <!-- Custom Script -->
     <script src="tvseries.js"></script>
   </body>
 </html>
