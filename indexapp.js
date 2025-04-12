@@ -1,7 +1,7 @@
 const apiKey = '42e8a383317db0a25624e00585d30469';
 
 // --- Cấu hình Danh mục ---
-const genres = [ // Danh sách thể loại cho cả dropdown và section
+const genres = [
     { id: 28, name: "Hành động" },
     { id: 35, name: "Hài hước" },
     { id: 18, name: "Tâm lý" },
@@ -13,7 +13,7 @@ const genres = [ // Danh sách thể loại cho cả dropdown và section
     { id: 99, name: "Phim tài liệu" }
 ];
 
-const customCategories = [ // Các danh mục tùy chỉnh
+const customCategories = [ 
     { name: "Phim Thịnh Hành Trong Tuần", url: `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=vi` },
     { name: "Phim Được Đánh Giá Cao", url: `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=vi&page=1®ion=VN` },
     { name: "Chương Trình TV Thịnh Hành", url: `https://api.themoviedb.org/3/trending/tv/week?api_key=${apiKey}&language=vi` },
@@ -89,7 +89,7 @@ function createCategorySection(title, carouselId, anchorId = '') {
 // --- Hàm fetch dữ liệu và hiển thị cho một category ---
 async function fetchAndDisplayCategory(title, apiUrl, carouselId, mediaType = 'movie', anchorId = '') {
     createCategorySection(title, carouselId, anchorId);
-    await new Promise(resolve => setTimeout(resolve, 0)); // Đợi DOM cập nhật
+    await new Promise(resolve => setTimeout(resolve, 0));
     const container = document.getElementById(carouselId);
     if (!container) { console.error(`Container #${carouselId} not found for ${title}.`); return; }
     try {
@@ -101,14 +101,13 @@ async function fetchAndDisplayCategory(title, apiUrl, carouselId, mediaType = 'm
         if (results.length === 0) { container.innerHTML = '<p class="text-muted ms-3">Không có nội dung.</p>'; return; }
         results.slice(0, 20).forEach(item => {
             let itemMediaType = mediaType;
-            // Xác định lại mediaType nếu API trả về (cho trending) hoặc nếu không được cung cấp
             if (item.media_type && (!mediaType || mediaType !== item.media_type)) {
                  itemMediaType = item.media_type;
              } else if (!mediaType) {
                  itemMediaType = item.title ? 'movie' : (item.name ? 'tv' : 'movie');
              }
 
-            if (itemMediaType === 'person') return; // Bỏ qua diễn viên/đạo diễn...
+            if (itemMediaType === 'person') return;
 
             const card = createMediaCard(item, itemMediaType);
             container.appendChild(card);
@@ -127,7 +126,6 @@ async function fetchHeroMovies() {
     container.empty().addClass('loading');
 
     try {
-        // Bước 1: Fetch danh sách cơ bản
         const listResponse = await fetch(listUrl);
         if (!listResponse.ok) throw new Error(`HTTP error! status: ${listResponse.status}`);
         const listData = await listResponse.json();
@@ -141,18 +139,14 @@ async function fetchHeroMovies() {
             container.removeClass('loading');
             return;
         }
-
-        // Bước 2: Tạo promises fetch chi tiết
         const detailPromises = topShowsBasic.map(basicShow => {
             const detailUrl = `https://api.themoviedb.org/3/tv/${basicShow.id}?api_key=${apiKey}&language=vi&append_to_response=content_ratings`;
             return fetch(detailUrl).then(res => res.ok ? res.json() : null)
                    .catch(error => { console.error(`Error fetching detail for ${basicShow.id}:`, error); return null; });
         });
 
-        // Bước 3: Đợi promises hoàn thành
         const detailedShowsData = await Promise.all(detailPromises);
 
-        // Bước 4: Tạo HTML
         detailedShowsData.forEach((detailedShow, index) => {
             if (!detailedShow) return;
             const basicShow = topShowsBasic[index];
@@ -218,9 +212,8 @@ async function fetchHeroMovies() {
 
 // --- Hàm khởi tạo ứng dụng ---
 function initializeApp() {
-    fetchHeroMovies(); // Fetch hero động
+    fetchHeroMovies(); 
 
-    // Fetch các category từ danh sách genres
     genres.forEach(genre => {
         const apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=vi&with_genres=${genre.id}&sort_by=popularity.desc`;
         const carouselId = `genre-${genre.id}-carousel`;
@@ -228,18 +221,14 @@ function initializeApp() {
         fetchAndDisplayCategory(genre.name, apiUrl, carouselId, 'movie', anchorId);
     });
 
-    // Fetch các category tùy chỉnh (bao gồm cả hoạt hình đã thêm vào)
     customCategories.forEach((category, index) => {
         const carouselId = `custom-category-${index}-carousel`;
-        // Xác định mediaType cẩn thận hơn
-         let mediaType = ''; // Để trống để tự xác định nếu là trending
+         let mediaType = ''; 
          if(category.name === "Phim Hoạt Hình Mới Nhất" || category.name === "Phim Được Đánh Giá Cao" || category.name === "Phim Thịnh Hành Trong Tuần") {
-             mediaType = 'movie'; // Hoạt hình, Top Rated Movie, Trending Movie chắc chắn là movie
+             mediaType = 'movie'; 
          } else if (category.name === "Chương Trình TV Thịnh Hành") {
-             mediaType = 'tv'; // Trending TV chắc chắn là tv
+             mediaType = 'tv';
          }
-         // Nếu bạn thêm category trending/all, mediaType nên để trống ''
-
         fetchAndDisplayCategory(category.name, category.url, carouselId, mediaType);
     });
 
@@ -256,18 +245,7 @@ function initializeApp() {
             }
         });
     }
-    // Scroll links (TV, Anime, Dropdown)
-    // const tvLink = document.getElementById('tv-series-link');
-    // if(tvLink) {
-    //     tvLink.addEventListener('click', (e) => {
-    //         e.preventDefault();
-    //         const tvSection = Array.from(document.querySelectorAll('.category-section .section-title'))
-    //                                  .find(titleEl => titleEl.textContent === "Chương Trình TV Thịnh Hành")
-    //                                  ?.closest('.category-section');
-    //         if(tvSection) tvSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    //         else alert("Không tìm thấy mục Chương Trình TV Thịnh Hành.");
-    //     });
-    // }
+    // Scroll to Genre Section
      const animeLink = document.getElementById('anime-link');
      if(animeLink){
          animeLink.addEventListener('click', (e) => {

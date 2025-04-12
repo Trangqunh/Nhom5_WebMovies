@@ -2,32 +2,27 @@ h2,
 h4 {
   color: var(--color-two);
 }
-
-
-
 /*1. Navbar Styles */
-
 /* --- Thanh điều hướng chính --- */
 .navbar {
-  background-color: var(--color-one);
-  border-radius: 20px;
-  padding: 20px 30px;
-  font-size: 19px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; 
+  background-color: var(--color-one); 
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); 
 }
-
 /* --- Các mục link trong Navbar --- */
 .navbar-nav .nav-link {
   color: rgb(225, 215, 215) !important;
   margin-right: 10px;
 }
-
 /* --- Hiệu ứng khi hover hoặc active link Navbar --- */
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
   color: var(--color-two) !important;
 }
-
 /* --- Logo và tên trang --- */
 .navbar-brand {
   font-size: 24px;
@@ -59,10 +54,29 @@ h4 {
   border: none;
   border-radius: 20px;
   color: var(--color-text);
+  padding: 12px 20px; 
+  font-size: 1rem; 
 }
 /* --- Chữ gợi ý (placeholder) trong ô tìm kiếm --- */
 .form-control::placeholder {
-  color: #e9d9d9;
+  color: #a29999;
+}
+#search-form button {
+  background-color: transparent; 
+  border: none; 
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#search-form button i {
+  font-size: 1.2rem;
+  color: var(--color-text); 
+}
+#search-form button:hover i {
+  color: #F8C100;
+  transition: color 0.3s ease;
 }
 
 /* --- Menu thả xuống (Dropdown) --- */
@@ -86,9 +100,6 @@ h4 {
   background-color: var(--color-two);
   color: var(--color-main);
 }
-
-
-
 /*2. Hero Section */
 
 /* --- Khu vực Hero chính --- */
@@ -115,7 +126,7 @@ h4 {
   left: 0;
   width: 100%;
   padding: 40px;
-  background: transparent; /* Bỏ nền mờ */
+  background: rgba(0, 0, 0, 0.3);
 }
 
 /* --- Tiêu đề phim/TV show trong Hero --- */
@@ -601,8 +612,6 @@ h4 {
 .footer-menu li a:hover {
   color: var(--color-two);
 }
-
-
 
 /*Responsive */
 
