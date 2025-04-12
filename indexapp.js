@@ -54,7 +54,7 @@ async function fetchMoviesByGenre(genreId) {
         const card = createMediaCard(movie, 'movie');
         container.appendChild(card);
     });
-    document.getElementById('movie-type').textContent = genres.find(genre => genre.id === parseInt(genreId))?.name + " genre" || 'N/A';
+    document.getElementById('movie-type').textContent = genres.find(genre => genre.id === parseInt(genreId))?.name || 'N/A';
 }
 
 // Lắng nghe chọn thể loại
@@ -65,8 +65,31 @@ genreMenu.addEventListener('click', function (e) {
     }
 });
 
-// Load mặc định thể loại đầu tiên khi mở trang
-fetchMoviesByGenre(genres[0].id);
+// Hàm fetch phim phổ biến
+async function fetchPopularMovies() {
+    const url = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en&page=1`;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const container = document.querySelector("#movies-section .list-items");
+        container.innerHTML = '';
+
+        data.results.forEach(movie => {
+            const card = createMediaCard(movie, 'movie');
+            container.appendChild(card);
+        });
+
+        document.getElementById('movie-type').textContent = "Popular Movies";
+    } catch (error) {
+        console.error('Error fetching popular movies:', error);
+    }
+}
+
+// Load mặc định phim phổ biến khi mở trang
+fetchPopularMovies();
+
+
 
 // Hàm fetch phim đang chiếu
 async function fetchHeroMovies() {
@@ -141,10 +164,13 @@ async function fetchAnime() {
 // Event listeners for TV Series and Anime links
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', (e) => {
+        const movieTypeElement = document.getElementById('movie-type'); // Lấy phần tử <h2> cần cập nhật
         if (e.target.textContent === 'TV Series') {
-            fetchTVSeries();
+            movieTypeElement.textContent = 'TV Series'; // Cập nhật nội dung
+            fetchTVSeries(); // Gọi hàm fetch TV Series
         } else if (e.target.textContent === 'Anime') {
-            fetchAnime();
+            movieTypeElement.textContent = 'Anime'; // Cập nhật nội dung
+            fetchAnime(); // Gọi hàm fetch Anime
         }
     });
 });
