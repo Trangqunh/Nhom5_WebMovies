@@ -1,15 +1,15 @@
 const apiKey = '42e8a383317db0a25624e00585d30469';
 
 const genres = [
-    { id: 28, name: "Hành động" },
-    { id: 35, name: "Hài hước" },
-    { id: 18, name: "Tâm lý" },
-    { id: 27, name: "Kinh dị" },
-    { id: 10749, name: "Lãng mạn" },
-    { id: 16, name: "Hoạt hình" },
-    { id: 878, name: "Khoa học viễn tưởng" },
-    { id: 12, name: "Phiêu lưu" },
-    { id: 53, name: "Hồi hộp" }
+    { id: 28, name: "Action" },
+    { id: 35, name: "Comedy" },
+    { id: 18, name: "Drama" },
+    { id: 27, name: "Horror" },
+    { id: 10749, name: "Romance" },
+    { id: 16, name: "Cartoon" },
+    { id: 878, name: "Sci-fi" },
+    { id: 12, name: "Adventure" },
+    { id: 53, name: "Thriller" }
 ];
 
 const genreMenu = document.getElementById('genre-menu');
@@ -54,6 +54,7 @@ async function fetchMoviesByGenre(genreId) {
         const card = createMediaCard(movie, 'movie');
         container.appendChild(card);
     });
+    document.getElementById('movie-type').textContent = genres.find(genre => genre.id === parseInt(genreId))?.name + " genre" || 'N/A';
 }
 
 // Lắng nghe chọn thể loại
