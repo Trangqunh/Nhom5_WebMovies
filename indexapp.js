@@ -1,6 +1,6 @@
 const apiKey = '42e8a383317db0a25624e00585d30469';
 
-//Cấu hình Danh mục
+// --- Cấu hình Danh mục ---
 const genres = [ // Danh sách thể loại cho cả dropdown và section
     { id: 28, name: "Hành động" },
     { id: 35, name: "Hài hước" },
@@ -23,16 +23,14 @@ const customCategories = [ // Các danh mục tùy chỉnh
 const genreMenu = document.getElementById('genre-menu');
 const categorySectionsContainer = document.getElementById('category-sections');
 
-
-//Render Genre Dropdown
+// --- Render Genre Dropdown ---
 genres.forEach(genre => {
     const li = document.createElement('li');
     li.innerHTML = `<a class="dropdown-item" href="#genre-${genre.id}" data-id="${genre.id}">${genre.name}</a>`;
     genreMenu.appendChild(li);
 });
 
-
-//Hàm tạo thẻ phim
+// --- Hàm tạo thẻ phim ---
 function createMediaCard(media, mediaType) {
     const { id, backdrop_path, poster_path, title, name } = media;
     const movieTitle = title || name || 'Không rõ';
@@ -50,41 +48,86 @@ function createMediaCard(media, mediaType) {
     return card;
 }
 
-// Hàm fetch phim theo thể loại
-async function fetchMoviesByGenre(genreId) {
-    const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en&with_genres=${genreId}`;
-    const response = await fetch(url);
-    const data = await response.json();
-
-    const container = document.querySelector("#movies-section .list-items");
-    container.innerHTML = '';
-
-    data.results.forEach(movie => {
-        const card = createMediaCard(movie, 'movie');
-        container.appendChild(card);
-    });
-    document.getElementById('movie-type').textContent = genres.find(genre => genre.id === parseInt(genreId))?.name + " genre" || 'N/A';
+// --- Hàm khởi tạo Owl Carousel cho một ID ---
+function initCategoryCarousel(carouselId) {
+    const carouselElement = $(`#${carouselId}`);
+    if (carouselElement.length > 0 && !carouselElement.hasClass('owl-loaded')) {
+        carouselElement.owlCarousel({
+            loop: false, margin: 15, nav: false, dots: false, lazyLoad: true,
+            responsive: { 0:{items:2}, 576:{items:3}, 768:{items:4}, 992:{items:5}, 1200:{items:6} }
+        });
+        const section = carouselElement.closest('.category-section');
+        if (section.length > 0) {
+            section.find('.category-prev-btn').off('click').on('click', function () { carouselElement.trigger('prev.owl.carousel'); });
+            section.find('.category-next-btn').off('click').on('click', function () { carouselElement.trigger('next.owl.carousel'); });
+        } else { console.warn(`Could not find parent .category-section for carousel #${carouselId}`); }
+    } else if (carouselElement.length === 0) { console.warn(`Carousel element #${carouselId} not found.`); }
 }
 
-// Lắng nghe chọn thể loại
-genreMenu.addEventListener('click', function (e) {
-    if (e.target.classList.contains('dropdown-item')) {
-        const genreId = e.target.getAttribute('data-id');
-        fetchMoviesByGenre(genreId);
+// --- Hàm tạo HTML cho một Section Category ---
+function createCategorySection(title, carouselId, anchorId = '') {
+    const section = document.createElement('section');
+    section.classList.add('category-section', 'my-5');
+    if (anchorId) { section.id = anchorId; }
+    section.innerHTML = `
+        <div class="container">
+            <div class="section-header d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title">${title}</h2>
+                <div class="custom-nav-buttons">
+                    <button class="category-prev-btn"><span class="carousel-nav-icon">❮</span></button>
+                    <button class="category-next-btn"><span class="carousel-nav-icon">❯</span></button>
+                </div>
+            </div>
+            <div class="owl-carousel owl-theme category-carousel" id="${carouselId}">
+                 <div class="text-center text-muted p-3">Đang tải...</div>
+            </div>
+        </div>`;
+    if (categorySectionsContainer) { categorySectionsContainer.appendChild(section); }
+    else { console.error("Container #category-sections not found."); }
+}
+
+// --- Hàm fetch dữ liệu và hiển thị cho một category ---
+async function fetchAndDisplayCategory(title, apiUrl, carouselId, mediaType = 'movie', anchorId = '') {
+    createCategorySection(title, carouselId, anchorId);
+    await new Promise(resolve => setTimeout(resolve, 0)); // Đợi DOM cập nhật
+    const container = document.getElementById(carouselId);
+    if (!container) { console.error(`Container #${carouselId} not found for ${title}.`); return; }
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status} for ${apiUrl}`);
+        const data = await response.json();
+        container.innerHTML = '';
+        const results = data.results || [];
+        if (results.length === 0) { container.innerHTML = '<p class="text-muted ms-3">Không có nội dung.</p>'; return; }
+        results.slice(0, 20).forEach(item => {
+            let itemMediaType = mediaType;
+            // Xác định lại mediaType nếu API trả về (cho trending) hoặc nếu không được cung cấp
+            if (item.media_type && (!mediaType || mediaType !== item.media_type)) {
+                 itemMediaType = item.media_type;
+             } else if (!mediaType) {
+                 itemMediaType = item.title ? 'movie' : (item.name ? 'tv' : 'movie');
+             }
+
+            if (itemMediaType === 'person') return; // Bỏ qua diễn viên/đạo diễn...
+
+            const card = createMediaCard(item, itemMediaType);
+            container.appendChild(card);
+        });
+        initCategoryCarousel(carouselId);
+    } catch (error) {
+        console.error(`Error fetching category "${title}":`, error);
+        container.innerHTML = `<p class="text-danger ms-3">Lỗi tải danh mục.</p>`;
     }
-});
+}
 
-// Load mặc định thể loại đầu tiên khi mở trang
-fetchMoviesByGenre(genres[0].id);
-
-// Hàm fetch phim đang chiếu
+// --- Hàm fetch Hero ---
 async function fetchHeroMovies() {
     const listUrl = `https://api.themoviedb.org/3/tv/top_rated?api_key=${apiKey}&language=vi&page=1`;
     const container = $('#hero-carousel');
     container.empty().addClass('loading');
 
     try {
-        //Fetch danh sách cơ bản
+        // Bước 1: Fetch danh sách cơ bản
         const listResponse = await fetch(listUrl);
         if (!listResponse.ok) throw new Error(`HTTP error! status: ${listResponse.status}`);
         const listData = await listResponse.json();
@@ -99,17 +142,17 @@ async function fetchHeroMovies() {
             return;
         }
 
-        //Tạo promises fetch chi tiết
+        // Bước 2: Tạo promises fetch chi tiết
         const detailPromises = topShowsBasic.map(basicShow => {
             const detailUrl = `https://api.themoviedb.org/3/tv/${basicShow.id}?api_key=${apiKey}&language=vi&append_to_response=content_ratings`;
             return fetch(detailUrl).then(res => res.ok ? res.json() : null)
                    .catch(error => { console.error(`Error fetching detail for ${basicShow.id}:`, error); return null; });
         });
 
-        //Đợi promises hoàn thành
+        // Bước 3: Đợi promises hoàn thành
         const detailedShowsData = await Promise.all(detailPromises);
 
-        //Tạo HTML
+        // Bước 4: Tạo HTML
         detailedShowsData.forEach((detailedShow, index) => {
             if (!detailedShow) return;
             const basicShow = topShowsBasic[index];
@@ -151,89 +194,17 @@ async function fetchHeroMovies() {
             container.append(item);
         });
 
-    $('#hero-carousel').owlCarousel({
-        items: 1,
-        loop: true,
-        nav: true,
-        dots: false,
-        autoplay: true,
-        autoplayTimeout: 5000,
-        autoplayHoverPause: true,
-        navText: [
-            "<span class='owl-prev-icon'>&#10094;</span>",  // ‹
-            "<span class='owl-next-icon'>&#10095;</span>"   // ›
-        ]
-    });
-}
-
-// Function to fetch TV series
-async function fetchTVSeries() {
-    const url = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en`;
-    const response = await fetch(url);
-    const data = await response.json();
-
-    const container = document.querySelector("#movies-section .list-items");
-    container.innerHTML = '';
-
-    data.results.forEach(tv => {
-        const card = createMediaCard(tv, 'tv');
-        container.appendChild(card);
-    });
-}
-
-// Function to fetch Anime
-async function fetchAnime() {
-    const url = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en&with_genres=16`;
-    const response = await fetch(url);
-    const data = await response.json();
-
-    const container = document.querySelector("#movies-section .list-items");
-    container.innerHTML = '';
-
-    data.results.forEach(anime => {
-        const card = createMediaCard(anime, 'tv');
-        container.appendChild(card);
-    });
-}
-
-// Event listeners for TV Series and Anime links
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-        if (e.target.textContent === 'TV Series') {
-            fetchTVSeries();
-        } else if (e.target.textContent === 'Anime') {
-            fetchAnime();
+         // Bước 5: Khởi tạo Owl Carousel
+        if (container.hasClass('owl-loaded')) {
+            container.trigger('destroy.owl.carousel');
         }
-    });
-});
-
-// Gọi khi trang load
-$(document).ready(() => {
-    fetchHeroMovies();
-});
-
-
-// Function to fetch latest cartoon movies
-async function fetchLatestCartoon() {
- 
-    const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=16`;
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (data.results && data.results.length > 0) {
-            const container = $('#cartoon-carousel');
-            container.empty(); // Clear any existing content
-
-            // Add each cartoon movie to the carousel
-            data.results.forEach(movie => {
-                const item = createMediaCard(movie, 'movie');
-                container.append(item);
+        if (container.children().length > 0) {
+            container.owlCarousel({
+                items: 1, loop: container.children().length > 1, nav: true, dots: false, autoplay: true, autoplayTimeout: 6000, autoplayHoverPause: true, lazyLoad: true,
+                navText: ["<span class='owl-prev-icon'>❮</span>","<span class='owl-next-icon'>❯</span>"]
             });
-
-            // Initialize Owl Carousel for cartoon section
-            initCartoonCarousel();
+        } else {
+             container.html('<p class="text-muted text-center">Không có TV shows nào để hiển thị.</p>');
         }
 
     } catch (error) {
@@ -245,7 +216,7 @@ async function fetchLatestCartoon() {
 }
 
 
-//Hàm khởi tạo ứng dụng
+// --- Hàm khởi tạo ứng dụng ---
 function initializeApp() {
     fetchHeroMovies(); // Fetch hero động
 
@@ -267,7 +238,7 @@ function initializeApp() {
          } else if (category.name === "Chương Trình TV Thịnh Hành") {
              mediaType = 'tv'; // Trending TV chắc chắn là tv
          }
-         // Nếu thêm category trending/all, mediaType nên để trống ''
+         // Nếu bạn thêm category trending/all, mediaType nên để trống ''
 
         fetchAndDisplayCategory(category.name, category.url, carouselId, mediaType);
     });
@@ -320,6 +291,5 @@ function initializeApp() {
     });
 }
 
-
-//Chạy khi DOM sẵn sàng
+// --- Chạy khi DOM sẵn sàng ---
 $(document).ready(initializeApp);
