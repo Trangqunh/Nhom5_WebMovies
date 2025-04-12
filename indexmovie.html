@@ -21,55 +21,45 @@
   </head>
 
 <body>
+  <!-- 1. Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="indexmovie.html">
+        <i class="fa-solid fa-film"></i>
+        <span>Movie<span style="color:#F8C100;">Time</span></span>
+      </a>
+      <!-- Nút bật/tắt menu cho mobile -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-      <div class="container">
-        <a class="navbar-brand" href="indexmovie.html">
-          <i class="fa-solid fa-film"></i>
-          <span>Movie<span style="color:#F8C100;">Time</span></span>
-          
-          <!-- <a href="#" target="_blank">
-           
-            <i class="fa-solid fa-film"></i>
-            <span>Fl<span style="color: var(--main-color);">i</span>x</span> -->
-        </a> 
-          
-
-
-          <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="indexmovie.html">Home</a>
-              </li>
-
-              <!-- Dropdown menu -->
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="genreDropdown" role="button" data-bs-toggle="dropdown"
-                  aria-expanded="false">
-                  Genre
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="genreDropdown" id="genre-menu">
-                  <!-- JS sẽ thêm thể loại vào đây -->
-                </ul>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link" href="#">TV Series</a>
-              </li>
-
-              <li class="nav-item">
-                <a class="nav-link" href="#">Anime</a>
-              </li>
-            </ul>
-
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search movies..." aria-label="Search" />
-              <button class="btn btn-outline-light" type="submit">Search</button>
-            </form>
-          </div>
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="indexmovie.html">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="genreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Genre
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="genreDropdown" id="genre-menu">
+                <!-- JS sẽ thêm thể loại vào đây -->
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="tv-series-link">TV Series</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="anime-link">Anime</a>
+            </li>
+        </ul>
+        <form class="d-flex" role="search" id="search-form">
+          <input class="form-control me-2" type="search" placeholder="Search movies..." aria-label="Search" id="search-input"/>
+          <button class="btn btn-outline-light" type="submit">Search</button>
+        </form>
       </div>
-    </nav>
+    </div>
+  </nav>
 
   <div class="container py-4">
 
