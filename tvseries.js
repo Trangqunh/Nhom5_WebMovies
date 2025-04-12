@@ -105,7 +105,7 @@ async function fetchHeroMovies() {
   container.empty();
   const listResponse = await fetch(listUrl);
   const listData = await listResponse.json();
-  const shows = listData.results.slice(0, 6);
+  const shows = listData.results.slice(7, 13);
 
   shows.forEach((show) => {
     const bgImage = `https://image.tmdb.org/t/p/original${show.backdrop_path}`;
