@@ -257,17 +257,17 @@ function initializeApp() {
         });
     }
     // Scroll links (TV, Anime, Dropdown)
-    const tvLink = document.getElementById('tv-series-link');
-    if(tvLink) {
-        tvLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            const tvSection = Array.from(document.querySelectorAll('.category-section .section-title'))
-                                     .find(titleEl => titleEl.textContent === "Chương Trình TV Thịnh Hành")
-                                     ?.closest('.category-section');
-            if(tvSection) tvSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            else alert("Không tìm thấy mục Chương Trình TV Thịnh Hành.");
-        });
-    }
+    // const tvLink = document.getElementById('tv-series-link');
+    // if(tvLink) {
+    //     tvLink.addEventListener('click', (e) => {
+    //         e.preventDefault();
+    //         const tvSection = Array.from(document.querySelectorAll('.category-section .section-title'))
+    //                                  .find(titleEl => titleEl.textContent === "Chương Trình TV Thịnh Hành")
+    //                                  ?.closest('.category-section');
+    //         if(tvSection) tvSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    //         else alert("Không tìm thấy mục Chương Trình TV Thịnh Hành.");
+    //     });
+    // }
      const animeLink = document.getElementById('anime-link');
      if(animeLink){
          animeLink.addEventListener('click', (e) => {
