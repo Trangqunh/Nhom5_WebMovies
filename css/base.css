@@ -15,7 +15,7 @@ body {
   color: var(--color-text);
   font-family: Arial, sans-serif;
 }
-
+ /* responsive: */
 /* --- Desktop lớn (>= 1200px) --- */
 @media (min-width: 1200px) {
   .container {
