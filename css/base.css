@@ -1,17 +1,196 @@
-:root{
-    --color-main:#121212;
-    --color-one:#1C1818;
-    --color-two:#F8C100;
-    --color-text:#fff;
-    
+:root {
+  --color-main: #121212;
+  --color-one: #1C1818;
+  --color-two: #F8C100;
+  --color-text: #fff;
+
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-main);
+  color: var(--color-text);
+  font-family: Arial, sans-serif;
+}
+
+/* --- Desktop lớn (>= 1200px) --- */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
   }
-  * {
-    box-sizing: border-box;
+}
+
+/* --- Tablet ngang (<= 992px) --- */
+@media (max-width: 992px) {
+  .navbar {
+    padding: 15px 20px;
   }
-  
-  body {
-    background-color:var(--color-main);
-    color:var(--color-text);
-    font-family: Arial, sans-serif;
+
+  .navbar-brand {
+    font-size: 22px;
   }
-  
+
+  .footer-section {
+    padding: 40px 0 15px;
+  }
+
+  .footer-widget h4 {
+    font-size: 18px;
+  }
+}
+
+/* --- Tablet đứng (<= 768px) --- */
+@media (max-width: 768px) {
+  #hero-carousel .item {
+    height: 400px;
+  }
+
+  .hero-metadata {
+    font-size: 0.85rem;
+    gap: 6px;
+  }
+
+  .footer-widget h4 {
+    font-size: 16px;
+  }
+
+  .footer-menu {
+    justify-content: center;
+    margin-top: 15px;
+  }
+}
+
+/* --- Mobile (<= 576px) --- */
+@media (max-width: 576px) {
+  .navbar {
+    padding: 10px 15px;
+  }
+
+  .navbar-brand {
+    font-size: 18px;
+  }
+
+  #hero-carousel .item {
+    height: 300px;
+  }
+
+  .footer-widget h4 {
+    font-size: 14px;
+  }
+
+  .footer-menu {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .copyright-area {
+    text-align: center;
+  }
+}
+
+/* --- Hero Section Responsive --- */
+@media (max-width: 768px) {
+  #hero-carousel .item {
+    height: 450px;
+  }
+
+  #hero-carousel .overlay h3 {
+    font-size: 1.6rem;
+  }
+
+  #hero-carousel .overlay p.hero-overview {
+    font-size: 0.85rem;
+    max-width: 85%;
+  }
+}
+
+@media (max-width: 576px) {
+  #hero-carousel .item {
+    height: 350px;
+  }
+
+  #hero-carousel .overlay h3 {
+    font-size: 1.4rem;
+  }
+
+  #hero-carousel .overlay p.hero-overview {
+    font-size: 0.8rem;
+    max-width: 95%;
+  }
+}
+
+/* --- Footer Responsive --- */
+@media (max-width: 768px) {
+  .footer-widget {
+    margin-bottom: 20px;
+  }
+
+  .footer-menu {
+    justify-content: center;
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .footer-widget h4 {
+    font-size: 14px;
+  }
+
+  .footer-menu {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .copyright-area {
+    text-align: center;
+  }
+}
+
+/* --- Navbar Responsive --- */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px 15px;
+  }
+
+  .navbar-brand {
+    font-size: 20px;
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-brand {
+    font-size: 18px;
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 12px;
+  }
+}
+
+/* --- Owl Carousel Responsive --- */
+@media (max-width: 992px) {
+  .category-carousel .item {
+    padding: 0 5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-carousel .item {
+    padding: 0 3px;
+  }
+}
+
+@media (max-width: 576px) {
+  .category-carousel .item {
+    padding: 0 2px;
+  }
+}
