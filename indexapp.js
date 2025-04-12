@@ -33,10 +33,10 @@ function createMediaCard(media, mediaType) {
         : 'https://via.placeholder.com/500x281?text=No+Image';
 
     card.innerHTML = `
-  <img src="${imageUrl}" alt="${movieTitle}">
-  <div class="title">
-    <a href="watch.html?id=${id}&mediaType=${mediaType}">${movieTitle}</a>
-  </div>
+    <a href="watch.html?id=${id}&mediaType=${mediaType}" style="text-decoration: none; color: inherit; font-weight: bold;">
+    <img src="${imageUrl}" alt="${movieTitle}">
+    <div class="title">${movieTitle}</div>
+    </a>
 `;
     return card;
 }
