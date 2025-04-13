@@ -126,7 +126,7 @@ h4 {
   left: 0;
   width: 100%;
   padding: 40px;
-  background: rgba(0, 0, 0, 0.3);
+  background: linear-gradient(to bottom, rgb(15 0 0 / 0%), rgb(19 0 0));
 }
 
 /* --- Tiêu đề phim/TV show trong Hero --- */
