@@ -35,23 +35,37 @@ function createMediaCard(media, mediaType) {
   return card;
 }
 
+// --- Hàm khởi tạo Owl Carousel cho một ID ---
 function initCategoryCarousel(carouselId) {
   const carouselElement = $(`#${carouselId}`);
-  if (carouselElement.length > 0 && !carouselElement.hasClass("owl-loaded")) {
-    carouselElement.owlCarousel({
-      loop: false,
-      margin: 15,
-      nav: false,
-      dots: false,
-      lazyLoad: true,
-      responsive: {
-        0: { items: 2 },
-        576: { items: 3 },
-        768: { items: 4 },
-        992: { items: 5 },
-        1200: { items: 6 },
-      },
-    });
+  if (carouselElement.length > 0 && !carouselElement.hasClass('owl-loaded')) {
+      carouselElement.owlCarousel({
+          loop: false, 
+          margin: 15,
+          nav: false, 
+          dots: false, 
+          lazyLoad: true,
+          responsive: {
+              0: { items: 2 },
+              576: { items: 3 },
+              768: { items: 4 },
+              992: { items: 5 },
+              1200: { items: 6 }
+          }
+      });
+      const section = carouselElement.closest('.category-section');
+      if (section.length > 0) {
+          section.find('.category-prev-btn').off('click').on('click', function () {
+              carouselElement.trigger('prev.owl.carousel');
+          });
+          section.find('.category-next-btn').off('click').on('click', function () {
+              carouselElement.trigger('next.owl.carousel');
+          });
+      } else {
+          console.warn(`Could not find parent .category-section for carousel #${carouselId}`);
+      }
+  } else if (carouselElement.length === 0) {
+      console.warn(`Carousel element #${carouselId} not found.`);
   }
 }
 
