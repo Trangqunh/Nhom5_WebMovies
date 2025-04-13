@@ -31,51 +31,42 @@
   </head>
 
   <body>
-    <!-- Navbar -->
+    <!-- 1. Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container">
         <a class="navbar-brand" href="indexmovie.html">
           <i class="fa-solid fa-film"></i>
-          <span>Movie<span style="color: #f8c100">Time</span></span>
+          <span>Movie<span style="color:#F8C100;">Time</span></span>
         </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarContent"
-        >
-          <span class="navbar-toggler-icon"></span>
+        <!-- Nút bật/tắt menu cho mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="indexmovie.html">Home</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="genreDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                >Genre</a
-              >
-              <ul class="dropdown-menu" id="genre-menu"></ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="tvseries.html">TV Series</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="cartoon.html">Cartoon</a>
-            </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="indexmovie.html">Home</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="genreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Genre
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="genreDropdown" id="genre-menu">
+                  <!-- JS sẽ thêm thể loại vào đây -->
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="tvseries.html" id="tv-series-link">TV Series</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="cartoon.html">Cartoon</a>
+              </li>
           </ul>
-          <form class="d-flex" role="search">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search movies..."
-            />
-            <button class="btn btn-outline-light" type="submit">Search</button>
+          <form class="d-flex" role="search" id="search-form">
+            <input class="form-control me-2" type="search" placeholder="Search movies..." aria-label="Search" id="search-input"/>
+            <button class="btn btn-outline-light" type="submit">
+              <i class="fa-solid fa-magnifying-glass"></i></button>
           </form>
         </div>
       </div>
@@ -88,9 +79,69 @@
       <div id="category-sections"></div>
     </div>
 
+    <!-- 4.Footer -->
     <footer class="footer-section">
       <div class="container">
         <div class="footer-content">
+          <div class="row">
+            <div class="col-lg-3 col-md-6">
+              <div class="footer-widget">
+                <div class="footer-logo">
+                  <a class="navbar-brand" href="indexmovie.html"> <!-- Thêm link logo footer -->
+                     <i class="fa-solid fa-film"></i>
+                     <span>Movie<span style="color:#F8C100;">Time</span></span>
+                  </a>
+                </div>
+                <p>
+                  Your ultimate destination for movies, TV shows, and entertainment content. Watch the latest releases and
+                  classics anytime, anywhere.
+                </p>
+                <div class="social-icons">
+                  <a href="#"><i class="fab fa-facebook-f"></i></a>
+                  <a href="#"><i class="fab fa-twitter"></i></a>
+                  <a href="#"><i class="fab fa-instagram"></i></a>
+                  <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="footer-widget">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                  <li><a href="indexmovie.html">Home</a></li>
+                  <li><a href="#">Movies</a></li> 
+                  <li><a href="#">TV Series</a></li> 
+                  <li><a href="#">Anime</a></li> 
+                  <li><a href="#">New Releases</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="footer-widget">
+                <h4>Genres</h4>
+                <ul class="footer-links" id="footer-genre-links">
+                   <!-- JS có thể thêm các link genre vào đây -->
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Comedy</a></li>
+                  <li><a href="#">Drama</a></li>
+                  <li><a href="#">Horror</a></li>
+                  <li><a href="#">Sci-Fi</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="footer-widget">
+                <h4>Newsletter</h4>
+                <p>Subscribe to our newsletter for updates on new releases and promotions.</p>
+                <form class="newsletter-form">
+                  <input type="email" placeholder="Your email address" />
+                  <button type="submit" class="btn btn-warning">Subscribe</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copyright-area">
           <div class="row">
             <div class="col-md-6">
               <p>© 2024 MovieTime. All rights reserved.</p>

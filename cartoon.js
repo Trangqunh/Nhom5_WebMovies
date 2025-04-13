@@ -41,6 +41,14 @@ async function fetchAndDisplayCategory(title, apiUrl, carouselId) {
     <div class="container">
       <div class="section-header d-flex justify-content-between align-items-center mb-4">
         <h2 class="section-title">${title}</h2>
+        <div class="custom-nav-buttons">
+          <button class="category-prev-btn" data-carousel="${carouselId}">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <button class="category-next-btn" data-carousel="${carouselId}">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
       </div>
       <div class="owl-carousel owl-theme category-carousel" id="${carouselId}">
         <div class="text-center text-muted p-3">Đang tải...</div>
@@ -54,7 +62,6 @@ async function fetchAndDisplayCategory(title, apiUrl, carouselId) {
   container.innerHTML = "";
 
   data.results.slice(0, 20).forEach((item) => {
-    // Kiểm tra nếu không có backdrop_path hoặc poster_path thì bỏ qua phim này
     if (!item.backdrop_path && !item.poster_path) return;
 
     const card = createMediaCard(item);
@@ -75,6 +82,15 @@ async function fetchAndDisplayCategory(title, apiUrl, carouselId) {
       1200: { items: 6 },
     },
   });
+
+  
+  document.querySelector(`.category-prev-btn[data-carousel="${carouselId}"]`).addEventListener("click", () => {
+    $(`#${carouselId}`).trigger("prev.owl.carousel");
+  });
+
+  document.querySelector(`.category-next-btn[data-carousel="${carouselId}"]`).addEventListener("click", () => {
+    $(`#${carouselId}`).trigger("next.owl.carousel");
+  });
 }
 
 async function fetchHeroMovies() {
@@ -86,7 +102,7 @@ async function fetchHeroMovies() {
   const shows = listData.results.slice(12, 18);
 
   shows.forEach((show) => {
-    // Kiểm tra nếu không có backdrop_path thì bỏ qua phim này
+    // Kiểm tra: nếu không có backdrop_path-> bỏ qua phim 
     if (!show.backdrop_path) return;
 
     const bgImage = `https://image.tmdb.org/t/p/original${show.backdrop_path}`;
@@ -108,6 +124,26 @@ async function fetchHeroMovies() {
     autoplayTimeout: 4000,
     autoplayHoverPause: true,
   });
+}
+
+function initCategoryCarousel(carouselId) {
+  const carouselElement = $(`#${carouselId}`);
+  if (carouselElement.length > 0 && !carouselElement.hasClass("owl-loaded")) {
+    carouselElement.owlCarousel({
+      loop: false,
+      margin: 15,
+      nav: true,
+      dots: false,
+      lazyLoad: true,
+      responsive: {
+        0: { items: 2 },
+        576: { items: 3 },
+        768: { items: 4 },
+        992: { items: 5 },
+        1200: { items: 6 },
+      },
+    });
+  }
 }
 
 fetchHeroMovies();
