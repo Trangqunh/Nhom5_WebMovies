@@ -34,9 +34,40 @@ function createMediaCard(media) {
   return card;
 }
 
-async function fetchAndDisplayCategory(title, apiUrl, carouselId) {
+
+// --- Genre Dropdown Scroll Handler ---
+document.addEventListener('DOMContentLoaded', function() {
+  const genreMenuElement = document.getElementById('genre-menu');
+  if (genreMenuElement) {
+      genreMenuElement.addEventListener('click', function (e) {
+          if (e.target.tagName === 'A' && e.target.classList.contains('dropdown-item')) {
+              e.preventDefault(); 
+              const targetHref = e.target.getAttribute('href'); 
+              if (targetHref && targetHref.startsWith('#')) {
+                  const targetId = targetHref.substring(1); 
+                  const targetElement = document.getElementById(targetId); 
+                  if (targetElement) {
+                      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  } else {
+                      console.warn(`Element with ID '${targetId}' not found for scrolling.`);
+                  }
+              } else {
+                   console.warn(`Invalid or missing href attribute for genre link: ${targetHref}`);
+              }
+          }
+      });
+  } else {
+      console.warn("Genre menu element (#genre-menu) not found.");
+  }
+});
+
+
+async function fetchAndDisplayCategory(title, apiUrl, carouselId, anchorId = '') { // <-- Thêm anchorId
   const section = document.createElement("section");
   section.classList.add("category-section", "my-5");
+  if (anchorId) { 
+      section.id = anchorId;
+  }
   section.innerHTML = `
     <div class="container">
       <div class="section-header d-flex justify-content-between align-items-center mb-4">
@@ -64,34 +95,37 @@ async function fetchAndDisplayCategory(title, apiUrl, carouselId) {
   data.results.slice(0, 20).forEach((item) => {
     if (!item.backdrop_path && !item.poster_path) return;
 
-    const card = createMediaCard(item);
+    const card = createMediaCard(item); 
     container.appendChild(card);
   });
 
-  $(`#${carouselId}`).owlCarousel({
-    loop: false,
-    margin: 15,
-    nav: false,
-    dots: false,
-    lazyLoad: true,
-    responsive: {
-      0: { items: 2 },
-      576: { items: 3 },
-      768: { items: 4 },
-      992: { items: 5 },
-      1200: { items: 6 },
-    },
-  });
+   // Phần khởi tạo Owl Carousel và gắn event cho nút cũng giữ nguyên hoặc kiểm tra lại nếu cần
+   $(`#${carouselId}`).owlCarousel({
+        loop: false,
+        margin: 15,
+        nav: false,
+        dots: false,
+        lazyLoad: true,
+        responsive: {
+            0: { items: 2 },
+            576: { items: 3 },
+            768: { items: 4 },
+            992: { items: 5 },
+            1200: { items: 6 }
+        }
+    });
 
-  
-  document.querySelector(`.category-prev-btn[data-carousel="${carouselId}"]`).addEventListener("click", () => {
-    $(`#${carouselId}`).trigger("prev.owl.carousel");
-  });
-
-  document.querySelector(`.category-next-btn[data-carousel="${carouselId}"]`).addEventListener("click", () => {
-    $(`#${carouselId}`).trigger("next.owl.carousel");
-  });
+    const sectionElement = $(`#${carouselId}`).closest('.category-section');
+    if (sectionElement.length) {
+        sectionElement.find(`.category-prev-btn[data-carousel="${carouselId}"]`).off('click').on('click', () => {
+            $(`#${carouselId}`).trigger('prev.owl.carousel');
+        });
+        sectionElement.find(`.category-next-btn[data-carousel="${carouselId}"]`).off('click').on('click', () => {
+            $(`#${carouselId}`).trigger('next.owl.carousel');
+        });
+    }
 }
+
 
 async function fetchHeroMovies() {
   const listUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=vi&with_genres=16&sort_by=popularity.desc&page=1`;
@@ -155,12 +189,11 @@ genres.forEach((genre) => {
       : genre.name === "Phim hoạt hình đánh giá cao nhất"
       ? `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=vi&with_genres=16&sort_by=vote_average.desc&vote_count.gte=100`
       : genre.name === "Phim hoạt hình hài hước"
-      ? `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=vi&with_genres=16&sort_by=release_date.desc`
-      : `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=vi&with_genres=${genre.id}&sort_by=popularity.desc&page=1`;
-
-  fetchAndDisplayCategory(genre.name, apiUrl, `carousel-${genre.id}`);
+      ? `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=vi&with_genres=16,35&sort_by=popularity.desc` // Ví dụ sửa lại để lấy cả hài hước (16,35)
+      : `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=vi&with_genres=${genre.id}&sort_by=popularity.desc&page=1`; // Giữ nguyên cho các thể loại khác nếu có
+  const anchorId = `genre-${genre.id}`;
+  fetchAndDisplayCategory(genre.name, apiUrl, `carousel-${genre.id}`, anchorId);
 });
-
 
 // --- Navbar Active Link Handler ---
 document.addEventListener('DOMContentLoaded', function() {
