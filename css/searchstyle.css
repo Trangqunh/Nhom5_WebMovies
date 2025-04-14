@@ -1,0 +1,149 @@
+/* --- Base Styles--- */
+:root {
+    --color-main: #121212;
+    --color-one: #1C1818;
+    --color-two: #F8C100;
+    --color-text: #fff;
+  }
+  
+  /* --- Body Padding (Đảm bảo nội dung không bị che bởi Navbar cố định) --- */
+  body {
+      padding-top: 80px; 
+      background-color: var(--color-main);
+      color: var(--color-text);
+  }
+  
+  /* --- Tiêu đề trang Kết quả tìm kiếm --- */
+  .search-title {
+      color: var(--color-two);
+      margin-bottom: 40px;   
+      padding-top: 20px;
+      font-weight: bold;
+      font-size: 1.8rem;     
+      border-bottom: 1px solid #444; 
+      padding-bottom: 15px;
+  }
+  /* --- Phần hiển thị từ khóa tìm kiếm trong tiêu đề --- */
+  .search-title span {
+      font-style: normal;   
+      font-weight: 600;     
+      color: #eee;          
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 5px;
+  }
+  
+  /* --- Lưới hiển thị kết quả tìm kiếm --- */
+  .search-results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+  }
+  
+  /* --- Style cho thẻ .item chứa thẻ phim trong lưới --- */
+  .search-results-grid .item {
+      padding: 0; 
+  }
+  
+  /* --- Style cho thẻ .movie-item (nội dung phim) --- */
+  .search-results-grid .item .movie-item {
+      background-color: transparent;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease; 
+      margin-bottom: 0;
+      display: block;
+      border: 1px solid transparent;
+  }
+  /* --- Hiệu ứng khi hover vào thẻ phim --- */
+  .search-results-grid .item .movie-item:hover {
+      transform: scale(1.05); 
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); 
+      border-color: rgba(248, 193, 0, 0.3); 
+  }
+  
+  /* --- Ảnh poster phim trong thẻ --- */
+  .search-results-grid .item img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 2 / 3; 
+      object-fit: cover;  
+      border-radius: 6px 6px 0 0;
+      background-color: #222; 
+      display: block; 
+  }
+  
+  /* --- Phần tiêu đề phim dưới ảnh --- */
+  .search-results-grid .item .title {
+      padding: 10px 8px;
+      text-align: left;
+      font-size: 0.9rem;
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis;
+      background-color: var(--color-one); 
+      border-radius: 0 0 6px 6px;
+  }
+  /* --- Chữ tiêu đề phim (thẻ <b>) --- */
+  .search-results-grid .item .title b {
+      color: var(--color-text);
+      text-decoration: none;
+      font-weight: 500;
+  }
+  
+  /* --- Style cho thẻ link <a> bao quanh movie-item --- */
+  .search-results-grid .item .movie-item a {
+      text-decoration: none;
+      color: inherit; 
+  }
+  
+  /* --- Thông báo (Không có kết quả / Lỗi / Đang tải) --- */
+  .no-results,
+  .loading-message,
+  #search-results-container > .text-danger { 
+      grid-column: 1 / -1; 
+      color: #bbb;
+      font-size: 1.1rem;
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      background-color: rgba(0,0,0,0.2);
+      border-radius: 8px;
+  }
+  
+  /* --- Spinner đơn giản cho trạng thái Đang tải (Tùy chọn) --- */
+  .loading-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-left-color: var(--color-two);
+      border-radius: 50%; 
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite; 
+      margin: 30px auto;
+  }
+  /* --- Animation cho spinner --- */
+  @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+  }
+  
+  /* --- Responsive Adjustments (Điều chỉnh cho màn hình nhỏ) --- */
+  @media (max-width: 576px) {
+      .search-results-grid {
+          grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+          gap: 15px;
+      }
+      /* --- Giảm kích thước font tiêu đề trang --- */
+      .search-title {
+          font-size: 1.5rem;
+      }
+      /* --- Style lại phần từ khóa trên mobile để không bị vỡ dòng --- */
+      .search-title span {
+          padding: 2px 6px;
+          display: inline-block; 
+          margin-top: 5px;
+      }
+  }

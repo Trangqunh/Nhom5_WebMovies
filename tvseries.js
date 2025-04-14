@@ -210,3 +210,21 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 });
+
+// Xử lý SearchFrom
+const searchForm = document.getElementById('search-form');
+const searchInput = document.getElementById('search-input');
+if (searchForm && searchInput) {
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const searchTerm = searchInput.value.trim();
+        if (searchTerm) {
+            // Chuyển hướng đến trang search.html với query parameter
+            window.location.href = `search.html?query=${encodeURIComponent(searchTerm)}`;
+        } else {
+             // Tùy chọn: thông báo cho người dùng nhập từ khóa hoặc focus vào input
+             searchInput.focus();
+             // Hoặc: alert('Vui lòng nhập từ khóa tìm kiếm.');
+        }
+    });
+}

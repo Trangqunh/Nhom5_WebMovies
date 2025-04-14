@@ -242,7 +242,12 @@ function initializeApp() {
             e.preventDefault();
             const searchTerm = searchInput.value.trim();
             if (searchTerm) {
-                alert(`Chức năng tìm kiếm "${searchTerm}" chưa được triển khai.`);
+                // Chuyển hướng đến trang search.html với query parameter
+                window.location.href = `search.html?query=${encodeURIComponent(searchTerm)}`;
+            } else {
+                // Tùy chọn: thông báo cho người dùng nhập từ khóa hoặc focus vào input
+                searchInput.focus();
+                // Hoặc: alert('Vui lòng nhập từ khóa tìm kiếm.');
             }
         });
     }
