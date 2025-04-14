@@ -2,7 +2,7 @@ const apiKey = '42e8a383317db0a25624e00585d30469';
 const searchResultsContainer = document.getElementById('search-results-container');
 const searchTitleElement = document.getElementById('search-title');
 
-// --- Hàm tạo thẻ phim (Copy từ indexapp.js hoặc tạo file utils.js) ---
+// --- Hàm tạo thẻ phim (Copy từ indexapp.js) ---
 function createMediaCard(media, mediaType) {
     const { id, backdrop_path, poster_path, title, name } = media;
     const movieTitle = title || name || 'Không rõ';
@@ -100,7 +100,7 @@ function setupSearchFormListener() {
 }
 
 
-// --- Navbar Active Link Handler (Copy từ file khác hoặc utils.js) ---
+// --- Navbar Active Link Handler (Copy từ file khác) ---
 function handleNavbarActiveLink() {
     const currentPath = window.location.pathname.split('/').pop();
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
@@ -129,11 +129,9 @@ function handleNavbarActiveLink() {
     }
 }
 
-// --- Populate Genre Dropdown (Optional - Có thể copy logic từ indexapp.js nếu cần) ---
+// --- Populate Genre Dropdown (copy logic từ indexapp.js) ---
 function populateGenreDropdown() {
-    // Bạn có thể copy phần render genre dropdown từ indexapp.js vào đây
-    // Hoặc để đơn giản, bạn có thể copy các thẻ <li> tĩnh từ indexmovie.html vào ul#genre-menu-search
-    // và ul#footer-genre-links-search trong search.html
+    //copy phần render genre dropdown từ indexapp.js vào đây
     console.log("Populate Genre Dropdown (Search Page) - Implementation needed if dynamic genres are required here.");
     // Ví dụ copy tĩnh: Tìm ul#genre-menu-search và thêm các <li>...</li> vào đó.
 }
