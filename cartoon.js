@@ -25,10 +25,10 @@ function createMediaCard(media) {
     ? `https://image.tmdb.org/t/p/w300${imagePath}`
     : "https://via.placeholder.com/300x450?text=No+Image";
   card.innerHTML = `
-    <div class="movie-item">
+    <div class="movie-item"><a href="watch.html?id=${id}&mediaType=movie" style="text-decoration: none; color: inherit;">
       <img src="${imageUrl}" alt="${movieTitle}" loading="lazy">
       <div class="title">
-        <a href="watch.html?id=${id}&mediaType=movie" title="${movieTitle}">${movieTitle}</a>
+        <b title="${movieTitle}">${movieTitle}</b>
       </div>
     </div>`;
   return card;
@@ -71,7 +71,7 @@ async function fetchAndDisplayCategory(title, apiUrl, carouselId, anchorId = '')
   section.innerHTML = `
     <div class="container">
       <div class="section-header d-flex justify-content-between align-items-center mb-4">
-        <h2 class="section-title">${title}</h2>
+        <h2 class="section-title" id="${anchorId}">${title}</h2>
         <div class="custom-nav-buttons">
           <button class="category-prev-btn" data-carousel="${carouselId}">
             <i class="fa-solid fa-chevron-left"></i>

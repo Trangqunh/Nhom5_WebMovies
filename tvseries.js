@@ -26,11 +26,12 @@ function createMediaCard(media, mediaType) {
     ? `https://image.tmdb.org/t/p/w300${imagePath}`
     : "https://via.placeholder.com/300x450?text=No+Image";
   card.innerHTML = `
-    <div class="movie-item">
+    <div class="movie-item"><a href="watch.html?id=${id}&mediaType=${mediaType}" style="text-decoration: none;  color: inherit;">
       <img src="${imageUrl}" alt="${movieTitle}" loading="lazy">
       <div class="title">
-        <a href="watch.html?id=${id}&mediaType=${mediaType}" title="${movieTitle}">${movieTitle}</a>
+          <b title="${movieTitle}">${movieTitle}</b>
       </div>
+      </a>
     </div>`;
   return card;
 }
@@ -39,33 +40,33 @@ function createMediaCard(media, mediaType) {
 function initCategoryCarousel(carouselId) {
   const carouselElement = $(`#${carouselId}`);
   if (carouselElement.length > 0 && !carouselElement.hasClass('owl-loaded')) {
-      carouselElement.owlCarousel({
-          loop: false, 
-          margin: 15,
-          nav: false, 
-          dots: false, 
-          lazyLoad: true,
-          responsive: {
-              0: { items: 2 },
-              576: { items: 3 },
-              768: { items: 4 },
-              992: { items: 5 },
-              1200: { items: 6 }
-          }
-      });
-      const section = carouselElement.closest('.category-section');
-      if (section.length > 0) {
-          section.find('.category-prev-btn').off('click').on('click', function () {
-              carouselElement.trigger('prev.owl.carousel');
-          });
-          section.find('.category-next-btn').off('click').on('click', function () {
-              carouselElement.trigger('next.owl.carousel');
-          });
-      } else {
-          console.warn(`Could not find parent .category-section for carousel #${carouselId}`);
+    carouselElement.owlCarousel({
+      loop: false,
+      margin: 15,
+      nav: false,
+      dots: false,
+      lazyLoad: true,
+      responsive: {
+        0: { items: 2 },
+        576: { items: 3 },
+        768: { items: 4 },
+        992: { items: 5 },
+        1200: { items: 6 }
       }
+    });
+    const section = carouselElement.closest('.category-section');
+    if (section.length > 0) {
+      section.find('.category-prev-btn').off('click').on('click', function () {
+        carouselElement.trigger('prev.owl.carousel');
+      });
+      section.find('.category-next-btn').off('click').on('click', function () {
+        carouselElement.trigger('next.owl.carousel');
+      });
+    } else {
+      console.warn(`Could not find parent .category-section for carousel #${carouselId}`);
+    }
   } else if (carouselElement.length === 0) {
-      console.warn(`Carousel element #${carouselId} not found.`);
+    console.warn(`Carousel element #${carouselId} not found.`);
   }
 }
 
@@ -78,7 +79,7 @@ function createCategorySection(title, carouselId, anchorId = "") {
   section.innerHTML = `
     <div class="container">
       <div class="section-header d-flex justify-content-between align-items-center mb-4">
-        <h2 class="section-title">${title}</h2>
+        <h2 class="section-title" id="${anchorId}">${title}</h2>
         <div class="custom-nav-buttons">
           <button class="category-prev-btn">❮</button>
           <button class="category-next-btn">❯</button>
@@ -177,35 +178,35 @@ genres.forEach((genre) => {
 
 
 // --- Navbar Active Link Handler ---
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const currentPath = window.location.pathname.split('/').pop(); // Lấy tên file hiện tại (e.g., 'tvseries.html')
   const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
 
   navLinks.forEach(link => {
-      const linkPath = new URL(link.href).pathname.split('/').pop(); // Lấy tên file từ href của link
+    const linkPath = new URL(link.href).pathname.split('/').pop(); // Lấy tên file từ href của link
 
-      // Xóa lớp active cũ (nếu có) và aria-current
-      link.classList.remove('active');
-      link.removeAttribute('aria-current');
+    // Xóa lớp active cũ (nếu có) và aria-current
+    link.classList.remove('active');
+    link.removeAttribute('aria-current');
 
-      // So sánh tên file hiện tại với tên file của link
-      if (currentPath === linkPath) {
-          // Nếu trùng khớp, thêm lớp active và aria-current
-          link.classList.add('active');
-          link.setAttribute('aria-current', 'page');
-      }
-      // Xử lý trường hợp đặc biệt cho trang index (có thể là '' hoặc 'indexmovie.html')
-      else if ((currentPath === '' || currentPath === 'indexmovie.html') && linkPath === 'indexmovie.html') {
-           link.classList.add('active');
-           link.setAttribute('aria-current', 'page');
-      }
+    // So sánh tên file hiện tại với tên file của link
+    if (currentPath === linkPath) {
+      // Nếu trùng khớp, thêm lớp active và aria-current
+      link.classList.add('active');
+      link.setAttribute('aria-current', 'page');
+    }
+    // Xử lý trường hợp đặc biệt cho trang index (có thể là '' hoặc 'indexmovie.html')
+    else if ((currentPath === '' || currentPath === 'indexmovie.html') && linkPath === 'indexmovie.html') {
+      link.classList.add('active');
+      link.setAttribute('aria-current', 'page');
+    }
   });
 
   // Đảm bảo dropdown "Genre" không bao giờ có trạng thái active
   const genreDropdown = document.getElementById('genreDropdown');
   if (genreDropdown) {
-      genreDropdown.classList.remove('active');
-      genreDropdown.removeAttribute('aria-current');
+    genreDropdown.classList.remove('active');
+    genreDropdown.removeAttribute('aria-current');
   }
 
 });

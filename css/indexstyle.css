@@ -100,6 +100,12 @@ h4 {
   background-color: var(--color-two);
   color: var(--color-main);
 }
+
+/* Đảm bảo nội dung không bị che bởi navbar */
+.category-section {
+  scroll-margin-top: 80px; /* Điều chỉnh giá trị này theo chiều cao của navbar */
+}
+
 /*2. Hero Section */
 
 /* --- Khu vực Hero chính --- */
@@ -651,3 +657,4 @@ h4 {
   .copyright-area .col-md-6 { width: 100%; }
   .copyright-area .col-md-6:last-child { margin-top: 10px; }
 }
+

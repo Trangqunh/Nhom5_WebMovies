@@ -47,7 +47,7 @@ window.onload = function () {
 };
 
 // --- Navbar Active Link Handler ---
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const currentPath = window.location.pathname.split('/').pop(); // Lấy tên file hiện tại (e.g., 'tvseries.html')
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
 
@@ -66,16 +66,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         // Xử lý trường hợp đặc biệt cho trang index (có thể là '' hoặc 'indexmovie.html')
         else if ((currentPath === '' || currentPath === 'indexmovie.html') && linkPath === 'indexmovie.html') {
-             link.classList.add('active');
-             link.setAttribute('aria-current', 'page');
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
         }
     });
-
-    // Đảm bảo dropdown "Genre" không bao giờ có trạng thái active
-    const genreDropdown = document.getElementById('genreDropdown');
-    if (genreDropdown) {
-        genreDropdown.classList.remove('active');
-        genreDropdown.removeAttribute('aria-current');
-    }
 
 });

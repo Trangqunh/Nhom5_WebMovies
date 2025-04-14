@@ -1,35 +1,96 @@
-/* body {
-    background-color: #121212 !important;
-    color: #fff;
-    font-family: Arial, sans-serif;
-} */
+body {
+    padding-top: 80px; /* Tăng giá trị này để đảm bảo nội dung không bị che */
+}
 
-/* Nav bar style giống watch.html */
+/*1. Navbar Styles */
+/* --- Thanh điều hướng chính --- */
 .navbar {
-    background-color: var(--color-main);
-    border-radius: 20px;
-    padding: 20px 30px;
-    font-size: 19px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: var(--color-one);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
+/* --- Các mục link trong Navbar --- */
 .navbar-nav .nav-link {
     color: rgb(225, 215, 215) !important;
     margin-right: 10px;
 }
 
-.navbar-nav .nav-link:hover {
+/* --- Hiệu ứng khi hover hoặc active link Navbar --- */
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
     color: var(--color-two) !important;
 }
 
+/* --- Logo và tên trang --- */
 .navbar-brand {
     font-size: 24px;
     font-weight: bold;
+    color: var(--color-text) !important;
 }
 
+/* --- Icon film trong logo --- */
 .navbar-brand i {
     color: var(--color-two);
+    margin-right: 5px;
 }
+
+/* --- Chữ "Time" trong logo --- */
+.navbar-brand span span {
+    color: var(--color-two);
+}
+
+/* --- Nút bật/tắt menu trên mobile (Toggler) --- */
+.navbar-dark .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* --- Icon 3 gạch của Toggler --- */
+.navbar-dark .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* --- Ô tìm kiếm --- */
+.form-control {
+    background-color: #565050;
+    border: none;
+    border-radius: 20px;
+    color: var(--color-text);
+    padding: 6px 20px;
+    font-size: 1rem;
+}
+
+/* --- Chữ gợi ý (placeholder) trong ô tìm kiếm --- */
+.form-control::placeholder {
+    color: #a29999;
+}
+
+#search-form button {
+    background-color: transparent;
+    border: none;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#search-form button i {
+    font-size: 1.2rem;
+    color: var(--color-text);
+}
+
+#search-form button:hover i {
+    color: #F8C100;
+    transition: color 0.3s ease;
+}
+/* Đảm bảo nội dung không bị che bởi navbar */
+.category-section {
+    scroll-margin-top: 80px; /* Điều chỉnh giá trị này theo chiều cao của navbar */
+  }
 
 .container {
     margin-top: 30px;

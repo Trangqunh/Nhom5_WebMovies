@@ -13,7 +13,7 @@ const genres = [
     { id: 99, name: "Phim tài liệu" }
 ];
 
-const customCategories = [ 
+const customCategories = [
     { name: "Phim Thịnh Hành Trong Tuần", url: `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=vi` },
     { name: "Phim Được Đánh Giá Cao", url: `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=vi&page=1®ion=VN` },
     { name: "Chương Trình TV Thịnh Hành", url: `https://api.themoviedb.org/3/trending/tv/week?api_key=${apiKey}&language=vi` },
@@ -39,11 +39,12 @@ function createMediaCard(media, mediaType) {
     card.classList.add("item");
     const imageUrl = imagePath ? `https://image.tmdb.org/t/p/w300${imagePath}` : 'https://via.placeholder.com/300x450?text=No+Image';
     card.innerHTML = `
-      <div class="movie-item">
+      <div class="movie-item"><a href="watch.html?id=${id}&mediaType=${mediaType}" style="text-decoration: none; color: inherit;">
         <img src="${imageUrl}" alt="${movieTitle}" loading="lazy">
         <div class="title">
-          <a href="watch.html?id=${id}&mediaType=${mediaType}" title="${movieTitle}">${movieTitle}</a>
+          <b title="${movieTitle}">${movieTitle}</b>
         </div>
+        </a>
       </div>`;
     return card;
 }
@@ -54,7 +55,7 @@ function initCategoryCarousel(carouselId) {
     if (carouselElement.length > 0 && !carouselElement.hasClass('owl-loaded')) {
         carouselElement.owlCarousel({
             loop: false, margin: 15, nav: false, dots: false, lazyLoad: true,
-            responsive: { 0:{items:2}, 576:{items:3}, 768:{items:4}, 992:{items:5}, 1200:{items:6} }
+            responsive: { 0: { items: 2 }, 576: { items: 3 }, 768: { items: 4 }, 992: { items: 5 }, 1200: { items: 6 } }
         });
         const section = carouselElement.closest('.category-section');
         if (section.length > 0) {
@@ -72,7 +73,7 @@ function createCategorySection(title, carouselId, anchorId = '') {
     section.innerHTML = `
         <div class="container">
             <div class="section-header d-flex justify-content-between align-items-center mb-4">
-                <h2 class="section-title">${title}</h2>
+                <h2 class="section-title" id="${anchorId}">${title}</h2>
                 <div class="custom-nav-buttons">
                     <button class="category-prev-btn"><span class="carousel-nav-icon">❮</span></button>
                     <button class="category-next-btn"><span class="carousel-nav-icon">❯</span></button>
@@ -102,10 +103,10 @@ async function fetchAndDisplayCategory(title, apiUrl, carouselId, mediaType = 'm
         results.slice(0, 20).forEach(item => {
             let itemMediaType = mediaType;
             if (item.media_type && (!mediaType || mediaType !== item.media_type)) {
-                 itemMediaType = item.media_type;
-             } else if (!mediaType) {
-                 itemMediaType = item.title ? 'movie' : (item.name ? 'tv' : 'movie');
-             }
+                itemMediaType = item.media_type;
+            } else if (!mediaType) {
+                itemMediaType = item.title ? 'movie' : (item.name ? 'tv' : 'movie');
+            }
 
             if (itemMediaType === 'person') return;
 
@@ -142,7 +143,7 @@ async function fetchHeroMovies() {
         const detailPromises = topShowsBasic.map(basicShow => {
             const detailUrl = `https://api.themoviedb.org/3/tv/${basicShow.id}?api_key=${apiKey}&language=vi&append_to_response=content_ratings`;
             return fetch(detailUrl).then(res => res.ok ? res.json() : null)
-                   .catch(error => { console.error(`Error fetching detail for ${basicShow.id}:`, error); return null; });
+                .catch(error => { console.error(`Error fetching detail for ${basicShow.id}:`, error); return null; });
         });
 
         const detailedShowsData = await Promise.all(detailPromises);
@@ -162,11 +163,11 @@ async function fetchHeroMovies() {
             const episodeCount = detailedShow.number_of_episodes;
             let ageRating = '';
             if (detailedShow.content_ratings?.results) {
-                 const ratings = detailedShow.content_ratings.results;
-                 const vnRating = ratings.find(r => r.iso_3166_1 === 'VN');
-                 const usRating = ratings.find(r => r.iso_3166_1 === 'US');
-                 ageRating = vnRating?.rating || usRating?.rating || '';
-                 if (ageRating.startsWith('TV-')) ageRating = ageRating.substring(3);
+                const ratings = detailedShow.content_ratings.results;
+                const vnRating = ratings.find(r => r.iso_3166_1 === 'VN');
+                const usRating = ratings.find(r => r.iso_3166_1 === 'US');
+                ageRating = vnRating?.rating || usRating?.rating || '';
+                if (ageRating.startsWith('TV-')) ageRating = ageRating.substring(3);
             }
 
             const item = `
@@ -188,17 +189,17 @@ async function fetchHeroMovies() {
             container.append(item);
         });
 
-         // Bước 5: Khởi tạo Owl Carousel
+        // Bước 5: Khởi tạo Owl Carousel
         if (container.hasClass('owl-loaded')) {
             container.trigger('destroy.owl.carousel');
         }
         if (container.children().length > 0) {
             container.owlCarousel({
                 items: 1, loop: container.children().length > 1, nav: true, dots: false, autoplay: true, autoplayTimeout: 6000, autoplayHoverPause: true, lazyLoad: true,
-                navText: ["<span class='owl-prev-icon'>❮</span>","<span class='owl-next-icon'>❯</span>"]
+                navText: ["<span class='owl-prev-icon'>❮</span>", "<span class='owl-next-icon'>❯</span>"]
             });
         } else {
-             container.html('<p class="text-muted text-center">Không có TV shows nào để hiển thị.</p>');
+            container.html('<p class="text-muted text-center">Không có TV shows nào để hiển thị.</p>');
         }
 
     } catch (error) {
@@ -212,7 +213,7 @@ async function fetchHeroMovies() {
 
 // --- Hàm khởi tạo ứng dụng ---
 function initializeApp() {
-    fetchHeroMovies(); 
+    fetchHeroMovies();
 
     genres.forEach(genre => {
         const apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=vi&with_genres=${genre.id}&sort_by=popularity.desc`;
@@ -223,12 +224,12 @@ function initializeApp() {
 
     customCategories.forEach((category, index) => {
         const carouselId = `custom-category-${index}-carousel`;
-         let mediaType = ''; 
-         if(category.name === "Phim Hoạt Hình Mới Nhất" || category.name === "Phim Được Đánh Giá Cao" || category.name === "Phim Thịnh Hành Trong Tuần") {
-             mediaType = 'movie'; 
-         } else if (category.name === "Chương Trình TV Thịnh Hành") {
-             mediaType = 'tv';
-         }
+        let mediaType = '';
+        if (category.name === "Phim Hoạt Hình Mới Nhất" || category.name === "Phim Được Đánh Giá Cao" || category.name === "Phim Thịnh Hành Trong Tuần") {
+            mediaType = 'movie';
+        } else if (category.name === "Chương Trình TV Thịnh Hành") {
+            mediaType = 'tv';
+        }
         fetchAndDisplayCategory(category.name, category.url, carouselId, mediaType);
     });
 
@@ -236,7 +237,7 @@ function initializeApp() {
     // Search Form
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
-     if(searchForm && searchInput) {
+    if (searchForm && searchInput) {
         searchForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const searchTerm = searchInput.value.trim();
@@ -246,17 +247,17 @@ function initializeApp() {
         });
     }
     // Scroll to Genre Section
-     const animeLink = document.getElementById('anime-link');
-     if(animeLink){
-         animeLink.addEventListener('click', (e) => {
-             e.preventDefault();
-             const cartoonSection = Array.from(document.querySelectorAll('.category-section .section-title'))
-                                        .find(titleEl => titleEl.textContent === "Phim Hoạt Hình Mới Nhất")
-                                        ?.closest('.category-section');
-             if(cartoonSection) cartoonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-             else alert("Không tìm thấy mục Phim Hoạt Hình Mới Nhất.");
-         });
-     }
+    const animeLink = document.getElementById('anime-link');
+    if (animeLink) {
+        animeLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const cartoonSection = Array.from(document.querySelectorAll('.category-section .section-title'))
+                .find(titleEl => titleEl.textContent === "Phim Hoạt Hình Mới Nhất")
+                ?.closest('.category-section');
+            if (cartoonSection) cartoonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            else alert("Không tìm thấy mục Phim Hoạt Hình Mới Nhất.");
+        });
+    }
     genreMenu.addEventListener('click', function (e) {
         if (e.target.classList.contains('dropdown-item')) {
             e.preventDefault();
@@ -271,7 +272,7 @@ function initializeApp() {
 
 
 // --- Navbar Active Link Handler ---
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const currentPath = window.location.pathname.split('/').pop(); // Lấy tên file hiện tại (e.g., 'tvseries.html')
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
 
@@ -290,8 +291,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         // Xử lý trường hợp đặc biệt cho trang index (có thể là '' hoặc 'indexmovie.html')
         else if ((currentPath === '' || currentPath === 'indexmovie.html') && linkPath === 'indexmovie.html') {
-             link.classList.add('active');
-             link.setAttribute('aria-current', 'page');
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
         }
     });
 
