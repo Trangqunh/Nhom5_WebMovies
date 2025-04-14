@@ -25,7 +25,7 @@ const categorySectionsContainer = document.getElementById('category-sections');
 
 
 
-/* 1. JS hiển thị dropdown Genre ở navbar (Quang) */
+/* 1. JS hiển thị dropdown Genre ở navbar */
 // --- Tạo các mục <li> cho menu dropdown Genre trong Navbar ---
 genres.forEach(genre => {
     const li = document.createElement('li');
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-/* 2. Làm JS hiển thị Film Categories (Đức Anh) */
+/* 2. Làm JS hiển thị Hero Section và Film Categories */
 // --- Hàm tạo cấu trúc HTML cho một thẻ phim (item) dựa trên dữ liệu từ API ---
 function createMediaCard(media, mediaType) {
     const { id, backdrop_path, poster_path, title, name } = media;
@@ -274,7 +274,7 @@ function initializeApp() {
 
 
 
-    // --- Xử lý sự kiện khác ---
+    /* ---4.  Xử lý sự kiện khác */
     // Search Form
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
