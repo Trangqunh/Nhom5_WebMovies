@@ -1,12 +1,12 @@
 const apiKey = '42e8a383317db0a25624e00585d30469';
 
-// --- Cấu hình Danh mục ---
+// --- Cấu hình Danh mục - Genre ---
 const genres = [
     { id: 28, name: "Hành động" },
     { id: 35, name: "Hài hước" },
     { id: 18, name: "Tâm lý" },
     { id: 27, name: "Kinh dị" },
-    { id: 10749, name: "Lãng mạn" },
+    { id: 10749, name: "Lãng mạn" },              
     { id: 878, name: "Khoa học viễn tưởng" },
     { id: 12, name: "Phiêu lưu" },
     { id: 53, name: "Hồi hộp" },
@@ -23,14 +23,53 @@ const customCategories = [
 const genreMenu = document.getElementById('genre-menu');
 const categorySectionsContainer = document.getElementById('category-sections');
 
-// --- Render Genre Dropdown ---
+
+
+/* 1. JS hiển thị dropdown Genre ở navbar (Quang) */
+// --- Tạo các mục <li> cho menu dropdown Genre trong Navbar ---
 genres.forEach(genre => {
     const li = document.createElement('li');
     li.innerHTML = `<a class="dropdown-item" href="#genre-${genre.id}" data-id="${genre.id}">${genre.name}</a>`;
     genreMenu.appendChild(li);
 });
 
-// --- Hàm tạo thẻ phim ---
+// --- JS xử lý hiển thị sáng chữ màu vàng cho page đang mở ở navbar ---
+document.addEventListener('DOMContentLoaded', function () {
+    const currentPath = window.location.pathname.split('/').pop(); // Lấy tên file hiện tại (e.g., 'tvseries.html')
+    const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+    navLinks.forEach(link => {
+        const linkPath = new URL(link.href).pathname.split('/').pop(); // Lấy tên file từ href của link
+
+        // Xóa lớp active cũ (nếu có) và aria-current
+        link.classList.remove('active');
+        link.removeAttribute('aria-current');
+
+        // So sánh tên file hiện tại với tên file của link
+        if (currentPath === linkPath) {
+            // Nếu trùng khớp, thêm lớp active và aria-current
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
+        }
+        // Xử lý trường hợp đặc biệt cho trang index (có thể là '' hoặc 'indexmovie.html')
+        else if ((currentPath === '' || currentPath === 'indexmovie.html') && linkPath === 'indexmovie.html') {
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
+        }
+    });
+
+    // Đảm bảo dropdown "Genre" không bao giờ có trạng thái active
+    const genreDropdown = document.getElementById('genreDropdown');
+    if (genreDropdown) {
+        genreDropdown.classList.remove('active');
+        genreDropdown.removeAttribute('aria-current');
+    }
+
+});
+
+
+/* 2. Làm JS hiển thị Film Categories (Đức Anh) */
+// --- Hàm tạo cấu trúc HTML cho một thẻ phim (item) dựa trên dữ liệu từ API ---
 function createMediaCard(media, mediaType) {
     const { id, backdrop_path, poster_path, title, name } = media;
     const movieTitle = title || name || 'Không rõ';
@@ -49,7 +88,7 @@ function createMediaCard(media, mediaType) {
     return card;
 }
 
-// --- Hàm khởi tạo Owl Carousel cho một ID ---
+// --- Hàm khởi tạo Owl Carousel cho một ID (danh mục phim cụ thể) sau khi đã thêm các thẻ phim vào. ---
 function initCategoryCarousel(carouselId) {
     const carouselElement = $(`#${carouselId}`);
     if (carouselElement.length > 0 && !carouselElement.hasClass('owl-loaded')) {
@@ -65,7 +104,7 @@ function initCategoryCarousel(carouselId) {
     } else if (carouselElement.length === 0) { console.warn(`Carousel element #${carouselId} not found.`); }
 }
 
-// --- Hàm tạo HTML cho một Section Category ---
+// --- Hàm tạo cấu trúc HTML cho một Section Category ---
 function createCategorySection(title, carouselId, anchorId = '') {
     const section = document.createElement('section');
     section.classList.add('category-section', 'my-5');
@@ -89,7 +128,7 @@ function createCategorySection(title, carouselId, anchorId = '') {
 
 // --- Hàm fetch dữ liệu và hiển thị cho một category ---
 async function fetchAndDisplayCategory(title, apiUrl, carouselId, mediaType = 'movie', anchorId = '') {
-    createCategorySection(title, carouselId, anchorId);
+    createCategorySection(title, carouselId, anchorId);  // Gọi hàm tạo cấu trúc HTML cho một section Category
     await new Promise(resolve => setTimeout(resolve, 0));
     const container = document.getElementById(carouselId);
     if (!container) { console.error(`Container #${carouselId} not found for ${title}.`); return; }
@@ -189,7 +228,7 @@ async function fetchHeroMovies() {
             container.append(item);
         });
 
-        // Bước 5: Khởi tạo Owl Carousel
+        // Khởi tạo Owl Carousel cho hero section: 
         if (container.hasClass('owl-loaded')) {
             container.trigger('destroy.owl.carousel');
         }
@@ -209,7 +248,6 @@ async function fetchHeroMovies() {
         container.removeClass('loading');
     }
 }
-
 
 // --- Hàm khởi tạo ứng dụng ---
 function initializeApp() {
@@ -232,6 +270,9 @@ function initializeApp() {
         }
         fetchAndDisplayCategory(category.name, category.url, carouselId, mediaType);
     });
+
+
+
 
     // --- Xử lý sự kiện khác ---
     // Search Form
@@ -276,40 +317,6 @@ function initializeApp() {
 }
 
 
-// --- Navbar Active Link Handler ---
-document.addEventListener('DOMContentLoaded', function () {
-    const currentPath = window.location.pathname.split('/').pop(); // Lấy tên file hiện tại (e.g., 'tvseries.html')
-    const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-
-    navLinks.forEach(link => {
-        const linkPath = new URL(link.href).pathname.split('/').pop(); // Lấy tên file từ href của link
-
-        // Xóa lớp active cũ (nếu có) và aria-current
-        link.classList.remove('active');
-        link.removeAttribute('aria-current');
-
-        // So sánh tên file hiện tại với tên file của link
-        if (currentPath === linkPath) {
-            // Nếu trùng khớp, thêm lớp active và aria-current
-            link.classList.add('active');
-            link.setAttribute('aria-current', 'page');
-        }
-        // Xử lý trường hợp đặc biệt cho trang index (có thể là '' hoặc 'indexmovie.html')
-        else if ((currentPath === '' || currentPath === 'indexmovie.html') && linkPath === 'indexmovie.html') {
-            link.classList.add('active');
-            link.setAttribute('aria-current', 'page');
-        }
-    });
-
-    // Đảm bảo dropdown "Genre" không bao giờ có trạng thái active
-    const genreDropdown = document.getElementById('genreDropdown');
-    if (genreDropdown) {
-        genreDropdown.classList.remove('active');
-        genreDropdown.removeAttribute('aria-current');
-    }
-
-});
-
 
 // --- Chạy khi DOM sẵn sàng ---
-$(document).ready(initializeApp);
+$(document).ready(initializeApp);  // Gọi hàm khởi tạo initializeApp khi trang đã tải xong.
