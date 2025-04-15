@@ -85,9 +85,66 @@ if (searchForm && searchInput) {
             // Chuyển hướng đến trang search.html với query parameter
             window.location.href = `search.html?query=${encodeURIComponent(searchTerm)}`;
         } else {
-             // Tùy chọn: thông báo cho người dùng nhập từ khóa hoặc focus vào input
-             searchInput.focus();
-             // Hoặc: alert('Vui lòng nhập từ khóa tìm kiếm.');
+            // Tùy chọn: thông báo cho người dùng nhập từ khóa hoặc focus vào input
+            searchInput.focus();
+            // Hoặc: alert('Vui lòng nhập từ khóa tìm kiếm.');
         }
     });
 }
+async function fetchEpisodes(seasonNumber = 1) {
+    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/season/${seasonNumber}?api_key=${apiKey}&language=en`;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const episodes = data.episodes || [];
+        const episodesContainer = document.getElementById("episodes-container");
+
+        // Xóa nội dung cũ (nếu có)
+        episodesContainer.innerHTML = "";
+
+        // Tạo danh sách các tập phim
+        episodes.forEach(episode => {
+            const episodeCard = document.createElement("div");
+            episodeCard.className = "episode-card";
+
+            episodeCard.innerHTML = `
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Ep ${episode.episode_number}</h5>
+                    </div>
+                </div>
+            `;
+            episodesContainer.appendChild(episodeCard);
+        });
+    } catch (error) {
+        console.error("Error fetching episodes:", error);
+        document.getElementById("episodes-container").textContent = "Unable to load episodes.";
+    }
+}
+
+// Gọi hàm fetchEpisodes khi trang được tải
+window.onload = function () {
+    fetchMovieDetails();
+    fetchTrailer();
+    fetchEpisodes(); // Mặc định tải season 1
+};
+
+// Thêm sự kiện cho nút chuyển
+document.getElementById("prev-btn").addEventListener("click", () => {
+    const container = document.getElementById("episodes-container");
+    container.scrollBy({ left: -200, behavior: "smooth" });
+});
+
+document.getElementById("next-btn").addEventListener("click", () => {
+    const container = document.getElementById("episodes-container");
+    container.scrollBy({ left: 200, behavior: "smooth" });
+});
+
+document.querySelectorAll('.episode-card').forEach(card => {
+    card.addEventListener('click', () => {
+        // Xóa lớp 'selected' khỏi tất cả các tập
+        document.querySelectorAll('.episode-card').forEach(c => c.classList.remove('selected'));
+        // Thêm lớp 'selected' vào tập được chọn
+        card.classList.add('selected');
+    });
+});

@@ -1,3 +1,4 @@
+/* --- Global Styles --- */
 body {
     background-image: url("images/background.png");
     background-repeat: no-repeat;
@@ -15,6 +16,7 @@ h2 {
     color: var(--color-two);
 }
 
+/* --- Movie Details Section --- */
 .movie-details {
     max-width: 1200px;
     margin: auto;
@@ -48,8 +50,66 @@ h2 {
     background-color: var(--color-two);
 }
 
-/*1. Navbar Styles */
-/* --- Thanh điều hướng chính --- */
+/* phim liên quan */
+.related-movies {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.related-movies-list {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    flex-grow: 1;
+    padding: 10px;
+    scroll-behavior: smooth;
+}
+
+.related-movies-list img {
+    width: 150px;
+    height: 225px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.related-movies-list img:hover {
+    transform: scale(1.1);
+}
+
+.btn-prev, .btn-next {
+    background-color: var(--color-two);
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.btn-prev:hover, .btn-next:hover {
+    background-color: #ffc107;
+}
+
+/* Ẩn thanh trượt ngang nhưng vẫn cho phép cuộn trong phần phim liên quan */
+.related-movies-list {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 10px;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none; /* Ẩn thanh trượt trên IE và Edge */
+    scrollbar-width: none; /* Ẩn thanh trượt trên Firefox */
+}
+
+.related-movies-list::-webkit-scrollbar {
+    display: none; /* Ẩn thanh trượt trên Chrome, Safari và Edge */
+}
+
+
+/* --- Navbar Styles --- */
 .navbar {
     position: fixed;
     top: 0;
@@ -60,47 +120,40 @@ h2 {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
-/* --- Các mục link trong Navbar --- */
 .navbar-nav .nav-link {
     color: rgb(225, 215, 215) !important;
     margin-right: 10px;
 }
 
-/* --- Hiệu ứng khi hover hoặc active link Navbar --- */
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
     color: var(--color-two) !important;
 }
 
-/* --- Logo và tên trang --- */
 .navbar-brand {
     font-size: 24px;
     font-weight: bold;
     color: var(--color-text) !important;
 }
 
-/* --- Icon film trong logo --- */
 .navbar-brand i {
     color: var(--color-two);
     margin-right: 5px;
 }
 
-/* --- Chữ "Time" trong logo --- */
 .navbar-brand span span {
     color: var(--color-two);
 }
 
-/* --- Nút bật/tắt menu trên mobile (Toggler) --- */
 .navbar-dark .navbar-toggler {
     border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* --- Icon 3 gạch của Toggler --- */
 .navbar-dark .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-/* --- Ô tìm kiếm --- */
+/* --- Search Form --- */
 .form-control {
     background-color: #565050;
     border: none;
@@ -110,7 +163,6 @@ h2 {
     font-size: 1rem;
 }
 
-/* --- Chữ gợi ý (placeholder) trong ô tìm kiếm --- */
 .form-control::placeholder {
     color: #a29999;
 }
@@ -133,12 +185,8 @@ h2 {
     color: #F8C100;
     transition: color 0.3s ease;
 }
-/* Đảm bảo nội dung không bị che bởi navbar */
-.category-section {
-    scroll-margin-top: 80px; /* Điều chỉnh giá trị này theo chiều cao của navbar */
-  }
 
-/* Footer Styles */
+/* --- Footer Styles --- */
 .footer-section {
     background-color: #1c1818;
     border-radius: 20px;
@@ -282,6 +330,7 @@ h2 {
     color: #ffc107;
 }
 
+/* --- Responsive Styles --- */
 @media (max-width: 767px) {
     .footer-menu {
         justify-content: flex-start;

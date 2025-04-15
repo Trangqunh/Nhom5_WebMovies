@@ -70,7 +70,7 @@ document.getElementById("btn-watch-now").addEventListener("click", function () {
 });
 
 // --- Navbar Active Link Handler ---
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const currentPath = window.location.pathname.split('/').pop(); // Lấy tên file hiện tại (e.g., 'tvseries.html')
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
 
@@ -89,8 +89,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         // Xử lý trường hợp đặc biệt cho trang index (có thể là '' hoặc 'indexmovie.html')
         else if ((currentPath === '' || currentPath === 'indexmovie.html') && linkPath === 'indexmovie.html') {
-             link.classList.add('active');
-             link.setAttribute('aria-current', 'page');
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
         }
     });
 
@@ -115,9 +115,57 @@ if (searchForm && searchInput) {
             // Chuyển hướng đến trang search.html với query parameter
             window.location.href = `search.html?query=${encodeURIComponent(searchTerm)}`;
         } else {
-             // Tùy chọn: thông báo cho người dùng nhập từ khóa hoặc focus vào input
-             searchInput.focus();
-             // Hoặc: alert('Vui lòng nhập từ khóa tìm kiếm.');
+            // Tùy chọn: thông báo cho người dùng nhập từ khóa hoặc focus vào input
+            searchInput.focus();
+            // Hoặc: alert('Vui lòng nhập từ khóa tìm kiếm.');
         }
     });
 }
+
+// ...existing code...
+
+async function fetchRelatedMovies() {
+    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/recommendations?api_key=${apiKey}&language=en`;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const relatedMovies = data.results || [];
+        const relatedMoviesList = document.getElementById('related-movies-list');
+
+        relatedMoviesList.innerHTML = ''; // Clear existing content
+
+        relatedMovies.forEach(movie => {
+            const img = document.createElement('img');
+            img.src = movie.poster_path
+                ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
+                : 'https://via.placeholder.com/150x225?text=No+Image';
+            img.alt = movie.title || movie.name || 'Unknown';
+            img.title = movie.title || movie.name || 'Unknown';
+            img.addEventListener('click', () => {
+                window.location.href = `watch.html?id=${movie.id}&mediaType=${mediaType}`;
+            });
+            relatedMoviesList.appendChild(img);
+        });
+    } catch (error) {
+        console.error("Error fetching related movies:", error);
+    }
+}
+
+// Add scrolling functionality for related movies
+document.getElementById('btn-prev').addEventListener('click', () => {
+    const relatedMoviesList = document.getElementById('related-movies-list');
+    relatedMoviesList.scrollBy({ left: -300, behavior: 'smooth' });
+});
+
+document.getElementById('btn-next').addEventListener('click', () => {
+    const relatedMoviesList = document.getElementById('related-movies-list');
+    relatedMoviesList.scrollBy({ left: 300, behavior: 'smooth' });
+});
+
+// Call fetchRelatedMovies on page load
+window.onload = () => {
+    fetchMediaDetails();
+    fetchRelatedMovies();
+};
+
+// ...existing code...

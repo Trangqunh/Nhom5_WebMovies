@@ -91,7 +91,7 @@ body {
 .category-section {
     scroll-margin-top: 80px; /* Điều chỉnh giá trị này theo chiều cao của navbar */
   }
-
+/* main */
 .container {
     margin-top: 30px;
 }
@@ -111,6 +111,81 @@ body {
     width: 100%;
     height: 100%;
     border: none;
+}
+.episodes-row {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.episode-card {
+    flex: 0 0 auto;
+    width: 150px;
+}
+
+.episode-navigation {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#prev-btn, #next-btn {
+    flex-shrink: 0;
+}
+
+/* Styles for episode cards */
+.episode-card {
+    flex: 0 0 auto;
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.episode-card .card {
+    background-color: #2c2c2c;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+}
+
+.episode-card .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.episode-card .card-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffc107;
+}
+
+/* Highlight selected episode */
+.episode-card.selected .card {
+    background-color: #ffc107;
+    color: #121212;
+    box-shadow: 0 4px 10px rgba(255, 193, 7, 0.5);
+}
+
+.episode-card.selected .card-title {
+    color: #121212;
+}
+
+/* Ẩn thanh trượt ngang nhưng vẫn cho phép cuộn */
+.episodes-row {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 10px;
+    padding: 10px 0;
+    -ms-overflow-style: none; /* Ẩn thanh trượt trên IE và Edge */
+    scrollbar-width: none; /* Ẩn thanh trượt trên Firefox */
+}
+
+.episodes-row::-webkit-scrollbar {
+    display: none; /* Ẩn thanh trượt trên Chrome, Safari và Edge */
 }
 
 /* Footer Styles */
@@ -256,6 +331,7 @@ body {
 .footer-menu li a:hover {
     color: #ffc107;
 }
+
 
 @media (max-width: 767px) {
     .footer-menu {
