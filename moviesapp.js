@@ -91,38 +91,44 @@ if (searchForm && searchInput) {
         }
     });
 }
-async function fetchEpisodes(seasonNumber = 1) {
+async function fetchEpisodes() {
     const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}?api_key=${apiKey}&language=en`;
     try {
         const response = await fetch(url);
         const data = await response.json();
-        const numberOfSeasons = data.number_of_seasons;
+        let totalEpisodes = data.number_of_episodes;
 
-        const episodesContainer = document.getElementById("episodes-container");
-        episodesContainer.innerHTML = "";
-
-        for (let season = 1; season <= numberOfSeasons; season++) {
-            const seasonUrl = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/season/${season}?api_key=${apiKey}&language=en`;
-            const seasonResponse = await fetch(seasonUrl);
-            const seasonData = await seasonResponse.json();
-
-            seasonData.episodes.forEach(episode => {
-                const episodeCard = document.createElement("div");
-                episodeCard.className = "episode-card";
-
-                episodeCard.innerHTML = `
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">S${season} - ep${episode.episode_number}</h5>
-                        </div>
-                    </div>
-                `;
-                episodesContainer.appendChild(episodeCard);
-            });
+        // Nếu số tập là N/A hoặc không xác định, mặc định là 1
+        if (!totalEpisodes || totalEpisodes === "N/A") {
+            totalEpisodes = 1;
         }
+
+        renderEpisodes(totalEpisodes);
     } catch (error) {
-        console.error("Error fetching all episodes:", error);
+        console.error("Error fetching episodes:", error);
         document.getElementById("episodes-container").textContent = "Unable to load episodes.";
+    }
+}
+
+function renderEpisodes(totalEpisodes) {
+    const episodesContainer = document.getElementById("episodes-container");
+    episodesContainer.innerHTML = "";
+
+    for (let i = 1; i <= totalEpisodes; i++) {
+        const episodeButton = document.createElement("button");
+        episodeButton.className = "episode-button";
+        episodeButton.textContent = i; // Hiển thị số tập trực tiếp (1, 2, 3, ...)
+
+        // Xử lý sự kiện khi nhấn vào nút tập
+        episodeButton.addEventListener("click", () => {
+            document.querySelectorAll(".episode-button").forEach(btn => btn.classList.remove("selected"));
+            episodeButton.classList.add("selected");
+
+            // Thực hiện hành động khi chọn tập (ví dụ: phát tập phim)
+            console.log(`Selected Episode: ${i}`);
+        });
+
+        episodesContainer.appendChild(episodeButton);
     }
 }
 
@@ -130,7 +136,7 @@ async function fetchEpisodes(seasonNumber = 1) {
 window.onload = function () {
     fetchMovieDetails();
     fetchTrailer();
-    fetchEpisodes(); // Mặc định tải season 1
+    fetchEpisodes();
 };
 
 // Thêm sự kiện cho nút chuyển

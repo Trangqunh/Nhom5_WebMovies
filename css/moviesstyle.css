@@ -1,5 +1,6 @@
 body {
-    padding-top: 80px; /* Tăng giá trị này để đảm bảo nội dung không bị che */
+    padding-top: 80px;
+    /* Tăng giá trị này để đảm bảo nội dung không bị che */
 }
 
 /*1. Navbar Styles */
@@ -87,10 +88,13 @@ body {
     color: #F8C100;
     transition: color 0.3s ease;
 }
+
 /* Đảm bảo nội dung không bị che bởi navbar */
 .category-section {
-    scroll-margin-top: 80px; /* Điều chỉnh giá trị này theo chiều cao của navbar */
-  }
+    scroll-margin-top: 80px;
+    /* Điều chỉnh giá trị này theo chiều cao của navbar */
+}
+
 /* main */
 .container {
     margin-top: 30px;
@@ -112,17 +116,54 @@ body {
     height: 100%;
     border: none;
 }
+
+/* chọn tập  */
+#episodes-container {
+    max-height: 300px;
+    /* Đặt chiều cao tối đa cho khung */
+    overflow-y: auto;
+    /* Hiển thị thanh cuộn dọc */
+    overflow-x: hidden;
+    /* Ẩn thanh cuộn ngang */
+    padding: 10px;
+    background-color: #1c1818;
+    /* Màu nền của khung */
+    border-radius: 10px;
+    /* Bo góc khung */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    /* Hiệu ứng đổ bóng */
+}
+
+/* Tùy chỉnh thanh cuộn */
+#episodes-container::-webkit-scrollbar {
+    width: 10px;
+    /* Độ rộng của thanh cuộn */
+}
+
+#episodes-container::-webkit-scrollbar-thumb {
+    background-color: #ffc107;
+    /* Màu vàng cho thanh cuộn */
+    border-radius: 5px;
+    /* Bo góc thanh cuộn */
+}
+
+#episodes-container::-webkit-scrollbar-thumb:hover {
+    background-color: #e0a800;
+    /* Màu vàng đậm hơn khi hover */
+}
+
+#episodes-container::-webkit-scrollbar-track {
+    background-color: #2c2c2c;
+    /* Màu nền của track thanh cuộn */
+    border-radius: 5px;
+}
+
 .episodes-row {
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
     gap: 10px;
     padding: 10px 0;
-}
-
-.episode-card {
-    flex: 0 0 auto;
-    width: 150px;
 }
 
 .episode-navigation {
@@ -131,61 +172,41 @@ body {
     gap: 10px;
 }
 
-#prev-btn, #next-btn {
+#prev-btn,
+#next-btn {
     flex-shrink: 0;
 }
 
-/* Styles for episode cards */
-.episode-card {
-    flex: 0 0 auto;
-    width: 150px;
+.episodes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.episode-button {
+    background-color: #2c2c2c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px;
     text-align: center;
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
 }
 
-.episode-card .card {
-    background-color: #2c2c2c;
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-}
-
-.episode-card .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-}
-
-.episode-card .card-title {
-    font-size: 16px;
-    font-weight: bold;
-    color: #ffc107;
-}
-
-/* Highlight selected episode */
-.episode-card.selected .card {
+.episode-button:hover {
     background-color: #ffc107;
     color: #121212;
-    box-shadow: 0 4px 10px rgba(255, 193, 7, 0.5);
 }
 
-.episode-card.selected .card-title {
+.episode-button.selected {
+    background-color: #ffc107;
     color: #121212;
-}
-
-/* Ẩn thanh trượt ngang nhưng vẫn cho phép cuộn */
-.episodes-row {
-    display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    gap: 10px;
-    padding: 10px 0;
-    -ms-overflow-style: none; /* Ẩn thanh trượt trên IE và Edge */
-    scrollbar-width: none; /* Ẩn thanh trượt trên Firefox */
-}
-
-.episodes-row::-webkit-scrollbar {
-    display: none; /* Ẩn thanh trượt trên Chrome, Safari và Edge */
+    border: 2px solid #fff;
 }
 
 /* Footer Styles */
