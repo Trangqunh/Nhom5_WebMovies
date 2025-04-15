@@ -19,20 +19,24 @@ async function fetchMediaDetails() {
         document.getElementById('movie-release-date').textContent = data.release_date || 'N/A';
         document.getElementById('movie-rating').textContent = data.vote_average || 'N/A';
 
-        //Thời lượng phim: movie-data.runtime, tv series-thời lượng tập đầu tiên (nếu có)
+        // Thời lượng phim
         let runtimeText = 'N/A';
         if (mediaType === "movie") {
             runtimeText = data.runtime ? `${data.runtime} minutes` : 'N/A';
         } else if (mediaType === "tv") {
-            runtimeText =
-                data.episode_run_time &&
-                    data.episode_run_time.length > 0
-                    ? `${data.episode_run_time[0]} minutes/ episode`
-                    : 'N/A';
+            runtimeText = data.episode_run_time && data.episode_run_time.length > 0
+                ? `${data.episode_run_time[0]} minutes per episode`
+                : 'N/A';
         }
         document.getElementById('movie-runtime').textContent = runtimeText;
 
-        //data.production_countries
+        // Số tập phim (chỉ áp dụng cho TV series)
+        if (mediaType === "tv") {
+            const episodesText = data.number_of_episodes ? `${data.number_of_episodes} episodes` : 'N/A';
+            document.getElementById('movie-episodes').textContent = episodesText;
+        }
+
+        // Quốc gia sản xuất
         let countryText = 'N/A';
         if (data.production_countries && data.production_countries.length > 0) {
             countryText = data.production_countries.map(country => country.name).join(', ');

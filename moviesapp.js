@@ -92,32 +92,36 @@ if (searchForm && searchInput) {
     });
 }
 async function fetchEpisodes(seasonNumber = 1) {
-    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/season/${seasonNumber}?api_key=${apiKey}&language=en`;
+    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}?api_key=${apiKey}&language=en`;
     try {
         const response = await fetch(url);
         const data = await response.json();
-        const episodes = data.episodes || [];
-        const episodesContainer = document.getElementById("episodes-container");
+        const numberOfSeasons = data.number_of_seasons;
 
-        // Xóa nội dung cũ (nếu có)
+        const episodesContainer = document.getElementById("episodes-container");
         episodesContainer.innerHTML = "";
 
-        // Tạo danh sách các tập phim
-        episodes.forEach(episode => {
-            const episodeCard = document.createElement("div");
-            episodeCard.className = "episode-card";
+        for (let season = 1; season <= numberOfSeasons; season++) {
+            const seasonUrl = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/season/${season}?api_key=${apiKey}&language=en`;
+            const seasonResponse = await fetch(seasonUrl);
+            const seasonData = await seasonResponse.json();
 
-            episodeCard.innerHTML = `
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Ep ${episode.episode_number}</h5>
+            seasonData.episodes.forEach(episode => {
+                const episodeCard = document.createElement("div");
+                episodeCard.className = "episode-card";
+
+                episodeCard.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">S${season} - ep${episode.episode_number}</h5>
+                        </div>
                     </div>
-                </div>
-            `;
-            episodesContainer.appendChild(episodeCard);
-        });
+                `;
+                episodesContainer.appendChild(episodeCard);
+            });
+        }
     } catch (error) {
-        console.error("Error fetching episodes:", error);
+        console.error("Error fetching all episodes:", error);
         document.getElementById("episodes-container").textContent = "Unable to load episodes.";
     }
 }
