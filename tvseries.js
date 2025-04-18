@@ -280,7 +280,7 @@ function filterTvSeries({ genreId = null, countryCode = null }) {
 function renderTvSeries(series) {
   tvseriesListContainer.innerHTML = "";
   if (!series || series.length === 0) {
-    tvseriesListContainer.innerHTML = '<p class="text-muted text-center">Không có TV Series nào để hiển thị.</p>';
+    tvseriesListContainer.innerHTML = '<div class="tvseries-empty-message">Không có TV Series nào để hiển thị.</div>';
     return;
   }
   series.forEach((item) => {

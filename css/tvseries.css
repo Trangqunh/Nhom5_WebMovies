@@ -37,6 +37,10 @@ body > .container {
     border-radius: 10px;  
     overflow: hidden;
     background: var(--color-main);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
   }
   
   .card:hover {
@@ -47,19 +51,54 @@ body > .container {
   .card img {
     border-radius: 10px 10px 0 0;
     width: 100%;
-    height: auto;
+    height: 300px;
+    object-fit: cover;
     background: var(--color-main);
+    display: block;
   }
   .card .card-body {
     padding: 10px;
     background: var(--color-main);
     border-radius: 0 0 10px 10px;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
   }
   .card-title {
     font-family: 'Arial', sans-serif;
     font-weight: bold;
     color: var(--color-text) !important;
     font-size: 16px !important;
-
+    margin-bottom: 0;
+    text-align: center;
   }
-  
+
+  /* Responsive: giữ tỷ lệ đồng đều cho card */
+  @media (max-width: 992px) {
+    .card img {
+      height: 220px;
+    }
+  }
+  @media (max-width: 768px) {
+    .card img {
+      height: 180px;
+    }
+  }
+  @media (max-width: 576px) {
+    .card img {
+      height: 140px;
+    }
+  }
+
+/* Căn giữa dòng chữ khi không có TV Series */
+#tvseries-list .tvseries-empty-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  width: 100%;
+  font-size: 1.1rem;
+  color: #bbb;
+  text-align: center;
+}

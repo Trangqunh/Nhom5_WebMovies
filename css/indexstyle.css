@@ -531,6 +531,7 @@ h4 {
   box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.4);
   color: #ccc;
   font-size: 0.95rem;
+  flex-shrink: 0;
 }
 
 /* --- Container nội dung chính Footer --- */
@@ -735,7 +736,7 @@ h4 {
     #hero-carousel .overlay p.hero-overview { max-width: 70%; font-size: 0.9rem; }
     .hero-metadata { font-size: 0.85rem; gap: 8px; }
     .movie-grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
     }
 }
 
@@ -765,7 +766,7 @@ h4 {
 /* --- Mobile (<= 576px) --- */
 @media (max-width: 576px) {
   .movie-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 0.7rem; /* Giảm thêm khoảng cách giữa các thẻ phim trên màn hình rất nhỏ */
   }
   .movie-card img,
@@ -785,9 +786,19 @@ h4 {
   .copyright-area .col-md-6:last-child { margin-top: 10px; }
 }
 
-/* Responsive cho card phim */
-@media (max-width: 1200px) {
-  .movie-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
+/* Đảm bảo footer luôn ở cuối trang */
+html, body {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Đảm bảo phần nội dung chiếm hết chiều cao còn lại, footer đẩy xuống dưới */
+body > .container,
+body > .container.py-4 {
+  flex: 1 0 auto;
 }
