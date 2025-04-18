@@ -1,20 +1,64 @@
 const apiKey = "42e8a383317db0a25624e00585d30469";
 
 const genres = [
-  { id: 27, name: "Top Rated" },
-  { id: 28, name: "Popular" },
-  { id: 35, name: "Airing Today" },
-  { id: 18, name: "On TV" },
+  { id: 28, name: "Hành động" },
+  { id: 35, name: "Hài hước" },
+  { id: 18, name: "Tâm lý" },
+  { id: 10749, name: "Lãng mạn" },
+  { id: 10751, name: "Gia đình" },
+  { id: 16, name: "Hoạt hình" },
+  { id: 80, name: "Hình sự" },
+  { id: 9648, name: "Bí ẩn" },
+  { id: 10759, name: "Phiêu lưu" }
 ];
 
-const genreMenu = document.getElementById("genre-menu");
-const categorySectionsContainer = document.getElementById("category-sections");
+const countries = [
+  { code: "US", name: "Hoa Kỳ" },
+  { code: "KR", name: "Hàn Quốc" },
+  { code: "JP", name: "Nhật Bản" },
+  { code: "CN", name: "Trung Quốc" },
+  { code: "FR", name: "Pháp" }
+];
 
-genres.forEach((genre) => {
-  const li = document.createElement("li");
-  li.innerHTML = `<a class="dropdown-item" href="#genre-${genre.id}" data-id="${genre.id}">${genre.name}</a>`;
-  genreMenu.appendChild(li);
-});
+let currentFilter = { genreId: null, countryCode: null };
+
+const genreMenu = document.getElementById("genre-menu");
+const countryMenu = document.getElementById("country-menu");
+const tvseriesListContainer = document.getElementById("tvseries-list");
+
+function loadTvGenres() {
+  genres.forEach((genre) => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.classList.add("dropdown-item");
+    a.href = "#";
+    a.textContent = genre.name;
+    a.dataset.genreId = genre.id;
+    a.addEventListener("click", () => {
+      currentFilter.genreId = genre.id;
+      filterTvSeries({ genreId: currentFilter.genreId, countryCode: currentFilter.countryCode });
+    });
+    li.appendChild(a);
+    genreMenu.appendChild(li);
+  });
+}
+
+function loadCountries() {
+  countries.forEach((country) => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.classList.add("dropdown-item");
+    a.href = "#";
+    a.textContent = country.name;
+    a.dataset.countryCode = country.code;
+    a.addEventListener("click", () => {
+      currentFilter.countryCode = country.code;
+      filterTvSeries({ genreId: currentFilter.genreId, countryCode: currentFilter.countryCode });
+    });
+    li.appendChild(a);
+    countryMenu.appendChild(li);
+  });
+}
 
 function createMediaCard(media, mediaType) {
   const { id, backdrop_path, poster_path, title, name } = media;
@@ -144,29 +188,84 @@ async function fetchHeroMovies() {
   });
 }
 
+function updateFilterDescription({ genreId = null, countryCode = null }) {
+  const descDiv = document.getElementById("filter-description");
+  const divider = document.getElementById("filter-divider");
+  const tvseriesTitle = document.getElementById("tvseries-title");
+  const heroSection = document.getElementById("hero-section");
+  let desc = "";
+
+  // Lấy tên thể loại
+  let genreName = null;
+  if (genreId) {
+    const genre = genres.find(g => g.id == genreId);
+    if (genre) genreName = genre.name;
+  }
+
+  // Lấy tên quốc gia
+  let countryName = null;
+  if (countryCode) {
+    const country = countries.find(c => c.code === countryCode);
+    if (country) countryName = country.name;
+  }
+
+  if (genreName && countryName) {
+    desc = `Thể loại: ${genreName} | Quốc gia: ${countryName}`;
+  } else if (genreName) {
+    desc = `Thể loại: ${genreName}`;
+  } else if (countryName) {
+    desc = `Quốc gia: ${countryName}`;
+  }
+
+  descDiv.textContent = desc;
+  divider.style.display = "block";
+  tvseriesTitle.style.display = (genreName || countryName) ? "none" : "block";
+  // Ẩn hero section khi có filter
+  if (heroSection) heroSection.style.display = (genreName || countryName) ? "none" : "block";
+}
+
+function filterTvSeries({ genreId = null, countryCode = null }) {
+  tvseriesListContainer.innerHTML = "";
+  updateFilterDescription({ genreId, countryCode });
+
+  let url = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=vi&sort_by=popularity.desc`;
+  if (genreId) url += `&with_genres=${genreId}`;
+  if (countryCode) url += `&with_origin_country=${countryCode}`;
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => renderTvSeries(data.results))
+    .catch(error => console.error("Lỗi khi lọc TV Series:", error));
+}
+
+function renderTvSeries(series) {
+  tvseriesListContainer.innerHTML = "";
+  if (!series || series.length === 0) {
+    tvseriesListContainer.innerHTML = '<p class="text-muted text-center">Không có TV Series nào để hiển thị.</p>';
+    return;
+  }
+  series.forEach((item) => {
+    const div = document.createElement("div");
+    div.classList.add("col");
+    div.innerHTML = `
+      <div class="card h-100 bg-dark text-white">
+        <a href="watch.html?id=${item.id}&mediaType=tv" style="text-decoration: none; color: inherit;">
+          <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" class="card-img-top" alt="${item.name}">
+          <div class="card-body">
+            <h5 class="card-title">${item.name}</h5>
+          </div>
+        </a>
+      </div>
+    `;
+    tvseriesListContainer.appendChild(div);
+  });
+}
+
 // Fetch hero movies and all genres
 fetchHeroMovies();
 
 genres.forEach((genre) => {
-  let apiPath = "";
-  switch (genre.name) {
-    case "Popular":
-      apiPath = "/tv/popular";
-      break;
-    case "Top Rated":
-      apiPath = "/tv/top_rated";
-      break;
-    case "On TV":
-      apiPath = "/tv/on_the_air";
-      break;
-    case "Airing Today":
-      apiPath = "/tv/airing_today";
-      break;
-    default:
-      apiPath = "/tv/popular";
-  }
-
-  const apiUrl = `https://api.themoviedb.org/3${apiPath}?api_key=${apiKey}&language=vi&page=1`;
+  const apiUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=vi&with_genres=${genre.id}&sort_by=popularity.desc`;
   fetchAndDisplayCategory(
     genre.name,
     apiUrl,
@@ -228,3 +327,10 @@ if (searchForm && searchInput) {
         }
     });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadTvGenres();
+  loadCountries();
+  fetchHeroMovies();
+  filterTvSeries({ genreId: currentFilter.genreId, countryCode: currentFilter.countryCode });
+});

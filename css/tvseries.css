@@ -1,0 +1,62 @@
+body > .container {
+    margin-top: 40px !important;
+  }
+  #hero-carousel .item {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    height: 600px; /* Chiều cao của Hero Section */
+    color: white;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  #hero-carousel h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  #hero-carousel .hero-overview {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  #filter-description {
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold !important;
+    color: var(--color-two) !important;
+  }
+  #cartoon-title {
+    color: var(--color-main) !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
+  }
+  .card {
+    transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s;
+    cursor: pointer;
+    z-index: 1;
+  }
+  
+  .card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    z-index: 2;
+ }
+  .card img {
+    border-radius: 10px 10px 0 0;
+    width: 100%;
+    height: auto;
+    background: var(--color-main);
+  }
+  .card .card-body {
+    padding: 10px;
+    background: var(--color-main);
+    border-radius: 0 0 10px 10px;
+  }
+  .card-title {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    color: var(--color-text) !important;
+    font-size: 16px !important;
+
+  }
+  

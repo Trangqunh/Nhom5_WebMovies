@@ -12,7 +12,17 @@ const genres = [
     { id: 53, name: "Hồi hộp" },
     { id: 99, name: "Phim tài liệu" }
 ];
-
+// --- Cấu hình quốc gia (Country) ---
+const countries = [
+    { code: "US", name: "Mỹ" },
+    { code: "KR", name: "Hàn Quốc" },
+    { code: "JP", name: "Nhật Bản" },
+    { code: "VN", name: "Việt Nam" },
+    { code: "FR", name: "Pháp" },
+    { code: "IN", name: "Ấn Độ" },
+    { code: "CN", name: "Trung Quốc" },
+];
+// --- Cấu hình Danh mục tùy chỉnh ---
 const customCategories = [
     { name: "Phim Thịnh Hành Trong Tuần", url: `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=vi` },
     { name: "Phim Được Đánh Giá Cao", url: `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=vi&page=1®ion=VN` },
@@ -66,7 +76,151 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
+// --- Hiển thị danh sách quốc gia trong menu dropdown ---
+const countryMenu = document.getElementById('country-menu');
+countries.forEach(country => {
+    const li = document.createElement('li');
+    li.innerHTML = `<a class="dropdown-item" href="#country-${country.code}" data-code="${country.code}">${country.name}</a>`;
+    countryMenu.appendChild(li);
+});
 
+// --- Hàm hiển thị danh sách phim theo thể loại hoặc quốc gia ---
+async function fetchAndDisplayFilteredMovies(title, apiUrl) {
+    const heroSection = document.getElementById('hero-section');
+    const container = document.getElementById('category-sections');
+
+    if (heroSection) heroSection.style.display = 'none';
+    container.innerHTML = '';
+
+    const sectionTitle = document.createElement('h2');
+    sectionTitle.classList.add('section-title', 'my-4');
+    sectionTitle.textContent = title;
+    container.appendChild(sectionTitle);
+
+    const movieGrid = document.createElement('div');
+    movieGrid.classList.add('movie-grid');
+    container.appendChild(movieGrid);
+
+    try {
+        // Lấy nhiều trang 
+        const pagePromises = [3, 4, 5].map(page =>
+            fetch(apiUrl + `&page=${page}`).then(res => res.ok ? res.json() : { results: [] })
+        );
+        const pageResults = await Promise.all(pagePromises);
+        const results = pageResults.flatMap(data => data.results || []);
+
+        if (results.length === 0) {
+            movieGrid.innerHTML = '<p class="text-muted">Không có nội dung.</p>';
+            return;
+        }
+
+        results.forEach(item => {
+            const card = createMediaCard(item, 'movie');
+            movieGrid.appendChild(card);
+        });
+    } catch (error) {
+        console.error(`Error fetching filtered movies:`, error);
+        movieGrid.innerHTML = `<p class="text-danger">Lỗi tải danh mục.</p>`;
+    }
+}
+
+// --- Hàm hiển thị danh sách phim và TV theo quốc gia ---
+async function fetchAndDisplayFilteredMoviesAndTV(title, apiUrlMovie, apiUrlTV) {
+    const heroSection = document.getElementById('hero-section');
+    const container = document.getElementById('category-sections');
+
+    if (heroSection) heroSection.style.display = 'none';
+    container.innerHTML = '';
+
+    const sectionTitle = document.createElement('h2');
+    sectionTitle.classList.add('section-title', 'my-4');
+    sectionTitle.textContent = title;
+    container.appendChild(sectionTitle);
+
+    const movieGrid = document.createElement('div');
+    movieGrid.classList.add('movie-grid');
+    container.appendChild(movieGrid);
+
+    try {
+        // Lấy nhiều trang cho cả movie và tv 
+        const moviePages = [2, 3].map(page =>
+            fetch(apiUrlMovie + `&page=${page}`).then(res => res.ok ? res.json() : { results: [] })
+        );
+        const tvPages = [2, 4].map(page =>
+            fetch(apiUrlTV + `&page=${page}`).then(res => res.ok ? res.json() : { results: [] })
+        );
+        const [movieResults, tvResults] = await Promise.all([
+            Promise.all(moviePages),
+            Promise.all(tvPages)
+        ]);
+        const results = [
+            ...movieResults.flatMap(data => data.results || []),
+            ...tvResults.flatMap(data => data.results || [])
+        ];
+
+        if (results.length === 0) {
+            movieGrid.innerHTML = `<p class="text-muted text-center">Không tìm thấy phim hoặc chương trình TV cho quốc gia này.</p>`;
+            return;
+        }
+
+        results.forEach(item => {
+            const mediaType = item.title ? 'movie' : 'tv';
+            const card = createMediaCard(item, mediaType);
+            movieGrid.appendChild(card);
+        });
+    } catch (error) {
+        console.error(`Error fetching filtered movies and TV:`, error);
+        movieGrid.innerHTML = `<p class="text-danger">Lỗi tải danh mục.</p>`;
+    }
+}
+
+// --- Hàm tạo thẻ phim (card) ---
+function createMediaCard(media, mediaType) {
+    const { id, backdrop_path, poster_path, title, name } = media;
+    const movieTitle = title || name || 'Không rõ';
+    const imagePath = poster_path || backdrop_path;
+    const imageUrl = imagePath ? `https://image.tmdb.org/t/p/w300${imagePath}` : 'https://via.placeholder.com/300x450?text=No+Image';
+
+    const card = document.createElement('div');
+    card.classList.add('movie-card');
+    card.innerHTML = `
+        <a href="watch.html?id=${id}&mediaType=${mediaType}" class="text-decoration-none text-dark">
+            <img src="${imageUrl}" alt="${movieTitle}" class="img-fluid rounded">
+            <div class="movie-title mt-2 text-center">
+                <b>${movieTitle}</b>
+            </div>
+            <p class="text-muted text-center">${mediaType === 'movie' ? 'Phim' : 'TV Show'}</p>
+        </a>
+    `;
+    return card;
+}
+
+// --- Xử lý sự kiện click vào thể loại ---
+genreMenu.addEventListener('click', function (e) {
+    if (e.target.classList.contains('dropdown-item')) {
+        e.preventDefault();
+        const genreId = e.target.getAttribute('data-id');
+        const genreName = e.target.textContent;
+        const apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=vi&with_genres=${genreId}&sort_by=popularity.desc`;
+        fetchAndDisplayFilteredMovies(`Thể loại: ${genreName}`, apiUrl);
+    }
+});
+
+// --- Xử lý sự kiện click vào quốc gia ---
+countryMenu.addEventListener('click', function (e) {
+    if (e.target.classList.contains('dropdown-item')) {
+        e.preventDefault();
+        const countryCode = e.target.getAttribute('data-code');
+        const countryName = e.target.textContent;
+
+        // Sử dụng with_origin_country để lọc theo quốc gia sản xuất
+        const apiUrlMovie = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=vi&with_origin_country=${countryCode}&sort_by=popularity.desc`;
+        const apiUrlTV = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=vi&with_origin_country=${countryCode}&sort_by=popularity.desc`;
+
+        // Gọi hàm hiển thị danh sách phim và TV
+        fetchAndDisplayFilteredMoviesAndTV(`Quốc gia: ${countryName}`, apiUrlMovie, apiUrlTV);
+    }
+});
 
 /* 2. Làm JS hiển thị Hero Section và Film Categories */
 // --- Hàm tạo cấu trúc HTML cho một thẻ phim (item) dựa trên dữ liệu từ API ---
@@ -74,17 +228,19 @@ function createMediaCard(media, mediaType) {
     const { id, backdrop_path, poster_path, title, name } = media;
     const movieTitle = title || name || 'Không rõ';
     const imagePath = poster_path || backdrop_path;
-    const card = document.createElement("div");
-    card.classList.add("item");
     const imageUrl = imagePath ? `https://image.tmdb.org/t/p/w300${imagePath}` : 'https://via.placeholder.com/300x450?text=No+Image';
+
+    const card = document.createElement('div');
+    card.classList.add('movie-card');
     card.innerHTML = `
-      <div class="movie-item"><a href="watch.html?id=${id}&mediaType=${mediaType}" style="text-decoration: none; color: inherit;">
-        <img src="${imageUrl}" alt="${movieTitle}" loading="lazy">
-        <div class="title">
-          <b title="${movieTitle}">${movieTitle}</b>
-        </div>
+        <a href="watch.html?id=${id}&mediaType=${mediaType}" class="text-decoration-none text-dark">
+            <img src="${imageUrl}" alt="${movieTitle}" class="img-fluid rounded">
+            <div class="movie-title mt-2 text-center">
+                <b>${movieTitle}</b>
+            </div>
+            <p class="text-muted text-center">${mediaType === 'movie' ? 'Phim' : 'TV Show'}</p>
         </a>
-      </div>`;
+    `;
     return card;
 }
 
