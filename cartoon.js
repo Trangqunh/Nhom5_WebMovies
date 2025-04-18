@@ -119,11 +119,11 @@ function renderMovies(movies) {
     const div = document.createElement("div");
     div.classList.add("col");
     div.innerHTML = `
-      <div class="card  ">
+      <div class="card">
         <a href="watch.html?id=${movie.id}&mediaType=movie" style="text-decoration: none; color: inherit;">
           <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="card-img-top" alt="${movie.title}">
           <div class="card-body">
-            <h5 class="card-title">${movie.title}</h5>
+            <h5 class="card-title" style="white-space:normal;overflow:visible;text-overflow:unset;">${movie.title}</h5>
           </div>
         </a>
       </div>
@@ -131,7 +131,6 @@ function renderMovies(movies) {
     movieListContainer.appendChild(div);
   });
 }
-
 
 async function fetchHeroMovies() {
   const apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=16&language=vi`;
