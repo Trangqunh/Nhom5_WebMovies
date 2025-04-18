@@ -119,7 +119,7 @@ function renderMovies(movies) {
     const div = document.createElement("div");
     div.classList.add("col");
     div.innerHTML = `
-      <div class="card h-100 bg-dark text-white">
+      <div class="card  ">
         <a href="watch.html?id=${movie.id}&mediaType=movie" style="text-decoration: none; color: inherit;">
           <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="card-img-top" alt="${movie.title}">
           <div class="card-body">
@@ -190,6 +190,40 @@ if (searchForm && searchInput) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const currentPath = window.location.pathname.split('/').pop(); // Lấy tên file hiện tại (e.g., 'cartoon.html')
+  const navLinks = document.querySelectorAll('.navbar-nav .nav-link'); // Các nút trên Navbar
+
+  // Xử lý hiệu ứng active cho Navbar
+  navLinks.forEach(link => {
+    const linkPath = new URL(link.href).pathname.split('/').pop(); // Lấy tên file từ href của link
+
+    // Xóa lớp active cũ (nếu có) và aria-current
+    link.classList.remove('active');
+    link.removeAttribute('aria-current');
+
+    // So sánh tên file hiện tại với tên file của link
+    if (currentPath === linkPath) {
+      // Nếu trùng khớp, thêm lớp active và aria-current
+      link.classList.add('active');
+      link.setAttribute('aria-current', 'page');
+    }
+  });
+
+  // Đảm bảo các mục trong menu "Genre" không có trạng thái active
+  const genreMenuItems = document.querySelectorAll('#genre-menu .dropdown-item');
+  genreMenuItems.forEach(item => {
+    item.classList.remove('active');
+    item.removeAttribute('aria-current');
+  });
+
+  // Đảm bảo các mục trong menu "Country" không có trạng thái active
+  const countryMenuItems = document.querySelectorAll('#country-menu .dropdown-item');
+  countryMenuItems.forEach(item => {
+    item.classList.remove('active');
+    item.removeAttribute('aria-current');
+  });
+
+  // Gọi các hàm khởi tạo khác
   loadCartoonGenres();
   loadCountries();
   fetchHeroMovies();

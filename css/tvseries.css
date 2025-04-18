@@ -27,13 +27,16 @@ body > .container {
   }
   #cartoon-title {
     color: var(--color-main) !important;
-    font-size: 20px !important;
+    font-size: 30px !important;
     font-weight: bold !important;
   }
   .card {
     transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s;
     cursor: pointer;
     z-index: 1;
+    border-radius: 10px;  
+    overflow: hidden;
+    background: var(--color-main);
   }
   
   .card:hover {

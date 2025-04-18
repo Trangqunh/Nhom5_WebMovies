@@ -45,9 +45,10 @@ genres.forEach(genre => {
 
 // --- JS xử lý hiển thị sáng chữ màu vàng cho page đang mở ở navbar ---
 document.addEventListener('DOMContentLoaded', function () {
-    const currentPath = window.location.pathname.split('/').pop(); // Lấy tên file hiện tại (e.g., 'tvseries.html')
-    const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+    const currentPath = window.location.pathname.split('/').pop(); // Lấy tên file hiện tại (e.g., 'indexmovie.html')
+    const navLinks = document.querySelectorAll('.navbar-nav .nav-link'); // Các nút trên Navbar
 
+    // Xử lý hiệu ứng active cho Navbar
     navLinks.forEach(link => {
         const linkPath = new URL(link.href).pathname.split('/').pop(); // Lấy tên file từ href của link
 
@@ -61,21 +62,23 @@ document.addEventListener('DOMContentLoaded', function () {
             link.classList.add('active');
             link.setAttribute('aria-current', 'page');
         }
-        // Xử lý trường hợp đặc biệt cho trang index (có thể là '' hoặc 'indexmovie.html')
-        else if ((currentPath === '' || currentPath === 'indexmovie.html') && linkPath === 'indexmovie.html') {
-            link.classList.add('active');
-            link.setAttribute('aria-current', 'page');
-        }
     });
 
-    // Đảm bảo dropdown "Genre" không bao giờ có trạng thái active
-    const genreDropdown = document.getElementById('genreDropdown');
-    if (genreDropdown) {
-        genreDropdown.classList.remove('active');
-        genreDropdown.removeAttribute('aria-current');
-    }
+    // Đảm bảo các mục trong menu "Genre" không có trạng thái active
+    const genreMenuItems = document.querySelectorAll('#genre-menu .dropdown-item');
+    genreMenuItems.forEach(item => {
+        item.classList.remove('active');
+        item.removeAttribute('aria-current');
+    });
 
+    // Đảm bảo các mục trong menu "Country" không có trạng thái active
+    const countryMenuItems = document.querySelectorAll('#country-menu .dropdown-item');
+    countryMenuItems.forEach(item => {
+        item.classList.remove('active');
+        item.removeAttribute('aria-current');
+    });
 });
+
 // --- Hiển thị danh sách quốc gia trong menu dropdown ---
 const countryMenu = document.getElementById('country-menu');
 countries.forEach(country => {
@@ -178,18 +181,21 @@ async function fetchAndDisplayFilteredMoviesAndTV(title, apiUrlMovie, apiUrlTV) 
 function createMediaCard(media, mediaType) {
     const { id, backdrop_path, poster_path, title, name } = media;
     const movieTitle = title || name || 'Không rõ';
-    const imagePath = poster_path || backdrop_path;
-    const imageUrl = imagePath ? `https://image.tmdb.org/t/p/w300${imagePath}` : 'https://via.placeholder.com/300x450?text=No+Image';
+    // Ưu tiên poster_path, nếu không có thì dùng backdrop_path, nếu không có thì dùng placeholder
+    let imagePath = poster_path || backdrop_path;
+    let imageUrl = imagePath
+        ? `https://image.tmdb.org/t/p/w300${imagePath}`
+        : 'https://via.placeholder.com/300x450/222/fff?text=No+Image';
 
     const card = document.createElement('div');
     card.classList.add('movie-card');
     card.innerHTML = `
         <a href="watch.html?id=${id}&mediaType=${mediaType}" class="text-decoration-none text-dark">
-            <img src="${imageUrl}" alt="${movieTitle}" class="img-fluid rounded">
+            <img src="${imageUrl}" alt="${movieTitle}" class="img-fluid rounded"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/300x450/222/fff?text=No+Image';">
             <div class="movie-title mt-2 text-center">
                 <b>${movieTitle}</b>
             </div>
-            <p class="text-muted text-center">${mediaType === 'movie' ? 'Phim' : 'TV Show'}</p>
         </a>
     `;
     return card;
@@ -238,7 +244,6 @@ function createMediaCard(media, mediaType) {
             <div class="movie-title mt-2 text-center">
                 <b>${movieTitle}</b>
             </div>
-            <p class="text-muted text-center">${mediaType === 'movie' ? 'Phim' : 'TV Show'}</p>
         </a>
     `;
     return card;
@@ -406,6 +411,93 @@ async function fetchHeroMovies() {
 }
 
 // --- Hàm khởi tạo ứng dụng ---
+let selectedGenreId = null;
+let selectedGenreName = null;
+let selectedCountryCode = null;
+let selectedCountryName = null;33
+
+// --- Hàm hiển thị danh sách phim theo thể loại và/hoặc quốc gia ---
+async function fetchAndDisplayFilteredMoviesCombined() {
+    const heroSection = document.getElementById('hero-section');
+    const container = document.getElementById('category-sections');
+    if (heroSection) heroSection.style.display = 'none';
+    container.innerHTML = '';
+
+    // Tạo tiêu đề lọc động
+    let title = '';
+    if (selectedGenreName && selectedCountryName) {
+        title = `Thể loại: ${selectedGenreName} | Quốc gia: ${selectedCountryName}`;
+    } else if (selectedGenreName) {
+        title = `Thể loại: ${selectedGenreName}`;
+    } else if (selectedCountryName) {
+        title = `Quốc gia: ${selectedCountryName}`;
+    } else {
+        title = 'Tất cả phim';
+    }
+
+    // Tiêu đề lọc căn giữa, giống tvseries (font, size, gạch dưới)
+    const sectionTitle = document.createElement('div');
+    sectionTitle.className = 'category-filter-title';
+    sectionTitle.textContent = title;
+    container.appendChild(sectionTitle);
+
+    // Gạch ngang dưới tiêu đề
+    const divider = document.createElement('hr');
+    divider.className = 'category-filter-divider';
+    container.appendChild(divider);
+
+    const movieGrid = document.createElement('div');
+    movieGrid.classList.add('movie-grid');
+    container.appendChild(movieGrid);
+
+    // Xây dựng URL lọc
+    let apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=vi&sort_by=popularity.desc`;
+    if (selectedGenreId) apiUrl += `&with_genres=${selectedGenreId}`;
+    if (selectedCountryCode) apiUrl += `&with_origin_country=${selectedCountryCode}`;
+
+    try {
+        // Lấy nhiều trang
+        const pagePromises = [1, 2, 3].map(page =>
+            fetch(apiUrl + `&page=${page}`).then(res => res.ok ? res.json() : { results: [] })
+        );
+        const pageResults = await Promise.all(pagePromises);
+        const results = pageResults.flatMap(data => data.results || []);
+
+        if (results.length === 0) {
+            movieGrid.innerHTML = '<p class="text-muted">Không có nội dung.</p>';
+            return;
+        }
+
+        results.forEach(item => {
+            const card = createMediaCard(item, 'movie');
+            movieGrid.appendChild(card);
+        });
+    } catch (error) {
+        console.error(`Error fetching filtered movies:`, error);
+        movieGrid.innerHTML = `<p class="text-danger">Lỗi tải danh mục.</p>`;
+    }
+}
+
+// --- Xử lý sự kiện click vào thể loại ---
+genreMenu.addEventListener('click', function (e) {
+    if (e.target.classList.contains('dropdown-item')) {
+        e.preventDefault();
+        selectedGenreId = e.target.getAttribute('data-id');
+        selectedGenreName = e.target.textContent;
+        fetchAndDisplayFilteredMoviesCombined();
+    }
+});
+
+// --- Xử lý sự kiện click vào quốc gia ---
+countryMenu.addEventListener('click', function (e) {
+    if (e.target.classList.contains('dropdown-item')) {
+        e.preventDefault();
+        selectedCountryCode = e.target.getAttribute('data-code');
+        selectedCountryName = e.target.textContent;
+        fetchAndDisplayFilteredMoviesCombined();
+    }
+});
+
 function initializeApp() {
     fetchHeroMovies();
 
@@ -426,9 +518,6 @@ function initializeApp() {
         }
         fetchAndDisplayCategory(category.name, category.url, carouselId, mediaType);
     });
-
-
-
 
     /* ---4.  Xử lý sự kiện khác */
     // Search Form

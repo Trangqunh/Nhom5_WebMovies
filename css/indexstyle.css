@@ -25,6 +25,17 @@ h4 {
 .navbar-nav .nav-link.active {
   color: var(--color-two) !important;
 }
+
+/* Chỉ đổi màu vàng khi hover vào dropdown-toggle, không mặc định vàng */
+.navbar-nav .nav-link.dropdown-toggle {
+  color: rgb(225, 215, 215) !important; /* Màu trắng mặc định */
+}
+
+.navbar-nav .nav-link.dropdown-toggle:hover,
+.navbar-nav .nav-link.dropdown-toggle:focus {
+  color: var(--color-two) !important; /* Màu vàng khi hover */
+}
+
 /* --- Logo và tên trang --- */
 .navbar-brand {
   font-size: 24px;
@@ -103,6 +114,7 @@ h4 {
   color: var(--color-main);
 }
 
+
 /* Đảm bảo nội dung không bị che bởi navbar */
 .category-section {
   scroll-margin-top: 80px; /* Điều chỉnh giá trị này theo chiều cao của navbar */
@@ -114,34 +126,43 @@ h4 {
 }
 /* Movie Grid */
 .movie-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem; /* Khoảng cách giữa các thẻ */
-  justify-content: center; /* Căn giữa các thẻ */
-  padding: 1rem; /* Thêm khoảng cách bên trong lưới */
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 6 cards per row */
+  gap: 1.5rem; /* Spacing between cards */
 }
 
 /* Movie Item */
 /* Căn chỉnh thẻ phim */
 .movie-card {
-    margin: 0.5rem; /* Các thẻ phim cách nhau 1 khoảng trống */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
+  margin: 0; /* Remove extra margin to align with grid */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
 .movie-card:hover {
-  transform: translateY(-5px);
+  scale: 1.05; /* Slightly enlarge the card on hover */
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
 .movie-card img {
   width: 100%;
-  height: auto;
+  height: 300px; /* Fixed height for consistency */
   border-radius: 8px;
+  object-fit: cover; /* Ensure the image fits properly */
+  background-color: #222; /* Add background for missing images */
+  display: block;
+}
+
+.movie-grid .movie-card img {
+  width: 100%;
+  height: 300px; /* Set a fixed height for consistency */
+  border-radius: 8px;
+  object-fit: cover; /* Ensure the image fits properly */
 }
 
 .movie-title {
+  font-family: 'Roboto', sans-serif; /* Đổi font chữ */
   font-size: 0.9rem;
   font-weight: bold;
   margin-top: 0.5rem;
@@ -357,6 +378,53 @@ h4 {
   font-weight: bold;
   font-size: 1.6rem;
   margin-bottom: 0;
+  text-align: left;
+}
+
+/* Thêm style cho tiêu đề lọc khi lọc thể loại/quốc gia */
+.category-filter-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--color-two);
+  margin: 2rem 0 2rem 0;
+  gap: 1.5rem;
+}
+
+.category-filter-title::before,
+.category-filter-title::after {
+  content: "";
+  flex: 1;
+  border-bottom: 2px solid var(--color-two);
+  opacity: 0.4;
+}
+
+/* Tiêu đề lọc thể loại/quốc gia giống tvseries */
+.category-filter-title {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--color-two) !important;
+  margin: 2.5rem 0 0.7rem 0;
+  letter-spacing: 0.5px;
+  background: none;
+  border: none;
+  padding: 0;
+  line-height: 1.2;
+  font-family: inherit;
+  display: block;
+}
+
+/* Gạch ngang dưới tiêu đề lọc */
+.category-filter-divider {
+  border: none;
+  border-top: 1px solid #f5f5f5;
+  opacity: 0.3;
+  margin: 0 auto 0 auto;
+  width: 100%;
 }
 
 /* --- Container chứa nút Prev/Next của danh mục --- */
@@ -666,12 +734,20 @@ h4 {
     #hero-carousel .overlay h3 { font-size: 1.8rem; }
     #hero-carousel .overlay p.hero-overview { max-width: 70%; font-size: 0.9rem; }
     .hero-metadata { font-size: 0.85rem; gap: 8px; }
+    .movie-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 /* --- Tablet đứng (<= 768px) --- */
 @media (max-width: 768px) {
   .movie-grid {
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem; /* Giảm khoảng cách giữa các thẻ phim trên màn hình nhỏ */
+  }
+  .movie-card img,
+  .movie-grid .movie-card img {
+    height: 220px;
   }
   #hero-carousel .item { height: 450px; }
   #hero-carousel .overlay { padding: 30px; }
@@ -689,7 +765,12 @@ h4 {
 /* --- Mobile (<= 576px) --- */
 @media (max-width: 576px) {
   .movie-grid {
-    gap: 0.5rem; /* Giảm thêm khoảng cách giữa các thẻ phim trên màn hình rất nhỏ */
+    grid-template-columns: 1fr;
+    gap: 0.7rem; /* Giảm thêm khoảng cách giữa các thẻ phim trên màn hình rất nhỏ */
+  }
+  .movie-card img,
+  .movie-grid .movie-card img {
+    height: 180px;
   }
   .navbar { padding: 15px 20px; }
   .navbar-brand { font-size: 20px; }
@@ -702,4 +783,11 @@ h4 {
   .copyright-area { text-align: center; }
   .copyright-area .col-md-6 { width: 100%; }
   .copyright-area .col-md-6:last-child { margin-top: 10px; }
+}
+
+/* Responsive cho card phim */
+@media (max-width: 1200px) {
+  .movie-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }

@@ -160,32 +160,71 @@ async function fetchAndDisplayCategory(
 
 async function fetchHeroMovies() {
   const listUrl = `https://api.themoviedb.org/3/tv/top_rated?api_key=${apiKey}&language=vi&page=1`;
-  const container = $("#hero-carousel");
-  container.empty();
-  const listResponse = await fetch(listUrl);
-  const listData = await listResponse.json();
-  const shows = listData.results.slice(7, 13);
+  const container = $('#hero-carousel');
+  container.empty().addClass('loading');
 
-  shows.forEach((show) => {
-    const bgImage = `https://image.tmdb.org/t/p/original${show.backdrop_path}`;
-    const item = `
-      <div class="item" style="background-image: url('${bgImage}');">
-        <div class="overlay">
-          <h2>${show.name}</h2>
-          <p>${show.overview}</p>
-          <a href="watch.html?id=${show.id}&mediaType=tv" class="btn btn-warning">Xem ngay</a>
+  try {
+    const listResponse = await fetch(listUrl);
+    if (!listResponse.ok) throw new Error(`HTTP error! status: ${listResponse.status}`);
+    const listData = await listResponse.json();
+
+    const topShows = listData.results.slice(10, 16); 
+
+    if (topShows.length === 0) {
+      container.html('<p class="text-muted text-center">Không tìm thấy TV shows phù hợp.</p>');
+      container.removeClass('loading');
+      return;
+    }
+
+    topShows.forEach(show => {
+      const bgImage = `https://image.tmdb.org/t/p/original${show.backdrop_path}`;
+      const name = show.name || "Không rõ";
+      const overview = show.overview || "Chưa có mô tả.";
+      const airDate = show.first_air_date;
+      const year = airDate ? airDate.substring(0, 4) : '';
+      const voteAverage = show.vote_average ? show.vote_average.toFixed(1) : 'N/A';
+
+      const item = `
+        <div class="item" style="background-image: url('${bgImage}');">
+          <div class="overlay">
+            <h3>${name}</h3>
+            <div class="hero-metadata">
+              ${year ? `<span>${year}</span>` : ''}
+              ${voteAverage ? `<span class="separator">•</span><span><i class="fas fa-star star-icon"></i> ${voteAverage}</span>` : ''}
+            </div>
+            <p class="hero-overview">${overview.substring(0, 120)}${overview.length > 120 ? '...' : ''}</p>
+            <a href="watch.html?id=${show.id}&mediaType=tv" class="btn btn-warning mt-2 btn-hero-detail">Xem chi tiết</a>
+          </div>
         </div>
-      </div>`;
-    container.append(item);
-  });
+      `;
+      container.append(item);
+    });
 
-  container.owlCarousel({
-    items: 1,
-    loop: true,
-    autoplay: true,
-    autoplayTimeout: 4000,
-    autoplayHoverPause: true,
-  });
+    // Khởi tạo Owl Carousel cho Hero Section
+    if (container.hasClass('owl-loaded')) {
+      container.trigger('destroy.owl.carousel');
+    }
+    if (container.children().length > 0) {
+      container.owlCarousel({
+        items: 1,
+        loop: container.children().length > 1,
+        nav: true,
+        dots: false,
+        autoplay: true,
+        autoplayTimeout: 6000,
+        autoplayHoverPause: true,
+        lazyLoad: true,
+        navText: ["<span class='owl-prev-icon'>❮</span>", "<span class='owl-next-icon'>❯</span>"]
+      });
+    } else {
+      container.html('<p class="text-muted text-center">Không có TV shows nào để hiển thị.</p>');
+    }
+  } catch (error) {
+    console.error("Error fetching hero TV shows:", error);
+    container.html('<p class="text-danger text-center">Lỗi khi tải TV shows nổi bật.</p>');
+  } finally {
+    container.removeClass('loading');
+  }
 }
 
 function updateFilterDescription({ genreId = null, countryCode = null }) {
@@ -248,7 +287,7 @@ function renderTvSeries(series) {
     const div = document.createElement("div");
     div.classList.add("col");
     div.innerHTML = `
-      <div class="card h-100 bg-dark text-white">
+      <div class="card ">
         <a href="watch.html?id=${item.id}&mediaType=tv" style="text-decoration: none; color: inherit;">
           <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" class="card-img-top" alt="${item.name}">
           <div class="card-body">
