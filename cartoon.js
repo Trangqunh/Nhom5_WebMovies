@@ -65,14 +65,13 @@ function updateFilterDescription({ genreId = null, countryCode = null }) {
   const cartoonTitle = document.getElementById("cartoon-title");
   let desc = "";
 
-  // Lấy tên thể loại
+
   let genreName = null;
   if (genreId) {
     const genre = genresForCartoon.find(g => g.id === genreId);
     if (genre) genreName = genre.name;
   }
 
-  // Lấy tên quốc gia
   let countryName = null;
   if (countryCode) {
     const country = countries.find(c => c.code === countryCode);
@@ -80,16 +79,15 @@ function updateFilterDescription({ genreId = null, countryCode = null }) {
   }
 
   if (genreName && countryName) {
-    desc = `Thể loại: phim hoạt hình ${genreName.toLowerCase()} | Quốc gia: ${countryName}`;
+    desc = `Thể loại: Phim hoạt hình ${genreName.toLowerCase()} | Quốc gia: ${countryName}`;
   } else if (genreName) {
-    desc = `Thể loại: phim hoạt hình ${genreName.toLowerCase()}`;
+    desc = `Thể loại: Phim hoạt hình ${genreName.toLowerCase()}`;
   } else if (countryName) {
     desc = `Quốc gia: ${countryName}`;
   } 
 
   descDiv.textContent = desc;
   divider.style.display = "block";
-  // Ẩn tiêu đề khi có filter
   cartoonTitle.style.display = (genreName || countryName) ? "none" : "block";
 }
 
@@ -131,7 +129,6 @@ function renderMovies(movies) {
     movieListContainer.appendChild(div);
   });
 }
-
 async function fetchHeroMovies() {
   const apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=16&language=vi`;
 
@@ -189,40 +186,37 @@ if (searchForm && searchInput) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const currentPath = window.location.pathname.split('/').pop(); // Lấy tên file hiện tại (e.g., 'cartoon.html')
-  const navLinks = document.querySelectorAll('.navbar-nav .nav-link'); // Các nút trên Navbar
+  const currentPath = window.location.pathname.split('/').pop(); 
+  const navLinks = document.querySelectorAll('.navbar-nav .nav-link'); 
 
-  // Xử lý hiệu ứng active cho Navbar
+
   navLinks.forEach(link => {
-    const linkPath = new URL(link.href).pathname.split('/').pop(); // Lấy tên file từ href của link
+    const linkPath = new URL(link.href).pathname.split('/').pop(); 
 
-    // Xóa lớp active cũ (nếu có) và aria-current
+  
     link.classList.remove('active');
     link.removeAttribute('aria-current');
 
-    // So sánh tên file hiện tại với tên file của link
+
     if (currentPath === linkPath) {
-      // Nếu trùng khớp, thêm lớp active và aria-current
+
       link.classList.add('active');
       link.setAttribute('aria-current', 'page');
     }
   });
 
-  // Đảm bảo các mục trong menu "Genre" không có trạng thái active
   const genreMenuItems = document.querySelectorAll('#genre-menu .dropdown-item');
   genreMenuItems.forEach(item => {
     item.classList.remove('active');
     item.removeAttribute('aria-current');
   });
 
-  // Đảm bảo các mục trong menu "Country" không có trạng thái active
   const countryMenuItems = document.querySelectorAll('#country-menu .dropdown-item');
   countryMenuItems.forEach(item => {
     item.classList.remove('active');
     item.removeAttribute('aria-current');
   });
 
-  // Gọi các hàm khởi tạo khác
   loadCartoonGenres();
   loadCountries();
   fetchHeroMovies();

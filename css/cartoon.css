@@ -1,11 +1,11 @@
 body > .container {
-  margin-top: 80px !important;
+  margin-top: 40px !important;
 }
 #hero-carousel .item {
   position: relative;
   background-size: cover;
   background-position: center;
-  height: 600px; /* Chiều cao của Hero Section */
+  height: 700px; /* Chiều cao của Hero Section */
   color: white;
   border-radius: 10px;
   overflow: hidden;
@@ -47,7 +47,7 @@ body > .container {
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 370px; /* Đảm bảo chiều cao tối thiểu đồng đều */
+  min-height: 370px; 
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s;
   cursor: pointer;
   z-index: 1;

@@ -1,11 +1,11 @@
 body > .container {
-    margin-top: 40px !important;
+    margin-top: 20px !important;
   }
   #hero-carousel .item {
     position: relative;
     background-size: cover;
     background-position: center;
-    height: 600px; /* Chiều cao của Hero Section */
+    height: 600px; 
     color: white;
     border-radius: 10px;
     overflow: hidden;

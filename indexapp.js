@@ -36,42 +36,34 @@ const categorySectionsContainer = document.getElementById('category-sections');
 
 
 /* 1. JS hiển thị dropdown Genre ở navbar */
-// --- Tạo các mục <li> cho menu dropdown Genre trong Navbar ---
 genres.forEach(genre => {
     const li = document.createElement('li');
     li.innerHTML = `<a class="dropdown-item" href="#genre-${genre.id}" data-id="${genre.id}">${genre.name}</a>`;
     genreMenu.appendChild(li);
 });
 
-// --- JS xử lý hiển thị sáng chữ màu vàng cho page đang mở ở navbar ---
 document.addEventListener('DOMContentLoaded', function () {
-    const currentPath = window.location.pathname.split('/').pop(); // Lấy tên file hiện tại (e.g., 'indexmovie.html')
-    const navLinks = document.querySelectorAll('.navbar-nav .nav-link'); // Các nút trên Navbar
+    const currentPath = window.location.pathname.split('/').pop();
+    const navLinks = document.querySelectorAll('.navbar-nav .nav-link'); 
 
-    // Xử lý hiệu ứng active cho Navbar
     navLinks.forEach(link => {
-        const linkPath = new URL(link.href).pathname.split('/').pop(); // Lấy tên file từ href của link
+        const linkPath = new URL(link.href).pathname.split('/').pop(); 
 
-        // Xóa lớp active cũ (nếu có) và aria-current
         link.classList.remove('active');
         link.removeAttribute('aria-current');
 
-        // So sánh tên file hiện tại với tên file của link
         if (currentPath === linkPath) {
-            // Nếu trùng khớp, thêm lớp active và aria-current
             link.classList.add('active');
             link.setAttribute('aria-current', 'page');
         }
     });
 
-    // Đảm bảo các mục trong menu "Genre" không có trạng thái active
     const genreMenuItems = document.querySelectorAll('#genre-menu .dropdown-item');
     genreMenuItems.forEach(item => {
         item.classList.remove('active');
         item.removeAttribute('aria-current');
     });
 
-    // Đảm bảo các mục trong menu "Country" không có trạng thái active
     const countryMenuItems = document.querySelectorAll('#country-menu .dropdown-item');
     countryMenuItems.forEach(item => {
         item.classList.remove('active');
@@ -79,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// --- Hiển thị danh sách quốc gia trong menu dropdown ---
 const countryMenu = document.getElementById('country-menu');
 countries.forEach(country => {
     const li = document.createElement('li');
@@ -87,7 +78,6 @@ countries.forEach(country => {
     countryMenu.appendChild(li);
 });
 
-// --- Hàm hiển thị danh sách phim theo thể loại hoặc quốc gia ---
 async function fetchAndDisplayFilteredMovies(title, apiUrl) {
     const heroSection = document.getElementById('hero-section');
     const container = document.getElementById('category-sections');
@@ -105,7 +95,6 @@ async function fetchAndDisplayFilteredMovies(title, apiUrl) {
     container.appendChild(movieGrid);
 
     try {
-        // Lấy nhiều trang 
         const pagePromises = [3, 4, 5].map(page =>
             fetch(apiUrl + `&page=${page}`).then(res => res.ok ? res.json() : { results: [] })
         );
@@ -145,7 +134,6 @@ async function fetchAndDisplayFilteredMoviesAndTV(title, apiUrlMovie, apiUrlTV) 
     container.appendChild(movieGrid);
 
     try {
-        // Lấy nhiều trang cho cả movie và tv 
         const moviePages = [2, 3].map(page =>
             fetch(apiUrlMovie + `&page=${page}`).then(res => res.ok ? res.json() : { results: [] })
         );
@@ -181,7 +169,6 @@ async function fetchAndDisplayFilteredMoviesAndTV(title, apiUrlMovie, apiUrlTV) 
 function createMediaCard(media, mediaType) {
     const { id, backdrop_path, poster_path, title, name } = media;
     const movieTitle = title || name || 'Không rõ';
-    // Ưu tiên poster_path, nếu không có thì dùng backdrop_path, nếu không có thì dùng placeholder
     let imagePath = poster_path || backdrop_path;
     let imageUrl = imagePath
         ? `https://image.tmdb.org/t/p/w300${imagePath}`
@@ -218,12 +205,9 @@ countryMenu.addEventListener('click', function (e) {
         e.preventDefault();
         const countryCode = e.target.getAttribute('data-code');
         const countryName = e.target.textContent;
-
-        // Sử dụng with_origin_country để lọc theo quốc gia sản xuất
         const apiUrlMovie = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=vi&with_origin_country=${countryCode}&sort_by=popularity.desc`;
         const apiUrlTV = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=vi&with_origin_country=${countryCode}&sort_by=popularity.desc`;
 
-        // Gọi hàm hiển thị danh sách phim và TV
         fetchAndDisplayFilteredMoviesAndTV(`Quốc gia: ${countryName}`, apiUrlMovie, apiUrlTV);
     }
 });
@@ -289,7 +273,7 @@ function createCategorySection(title, carouselId, anchorId = '') {
 
 // --- Hàm fetch dữ liệu và hiển thị cho một category ---
 async function fetchAndDisplayCategory(title, apiUrl, carouselId, mediaType = 'movie', anchorId = '') {
-    createCategorySection(title, carouselId, anchorId);  // Gọi hàm tạo cấu trúc HTML cho một section Category
+    createCategorySection(title, carouselId, anchorId);  
     await new Promise(resolve => setTimeout(resolve, 0));
     const container = document.getElementById(carouselId);
     if (!container) { console.error(`Container #${carouselId} not found for ${title}.`); return; }
@@ -435,13 +419,11 @@ async function fetchAndDisplayFilteredMoviesCombined() {
         title = 'Tất cả phim';
     }
 
-    // Tiêu đề lọc căn giữa, giống tvseries (font, size, gạch dưới)
     const sectionTitle = document.createElement('div');
     sectionTitle.className = 'category-filter-title';
     sectionTitle.textContent = title;
     container.appendChild(sectionTitle);
 
-    // Gạch ngang dưới tiêu đề
     const divider = document.createElement('hr');
     divider.className = 'category-filter-divider';
     container.appendChild(divider);
@@ -450,13 +432,11 @@ async function fetchAndDisplayFilteredMoviesCombined() {
     movieGrid.classList.add('movie-grid');
     container.appendChild(movieGrid);
 
-    // Xây dựng URL lọc
     let apiUrl = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=vi&sort_by=popularity.desc`;
     if (selectedGenreId) apiUrl += `&with_genres=${selectedGenreId}`;
     if (selectedCountryCode) apiUrl += `&with_origin_country=${selectedCountryCode}`;
 
     try {
-        // Lấy nhiều trang
         const pagePromises = [1, 2, 3].map(page =>
             fetch(apiUrl + `&page=${page}`).then(res => res.ok ? res.json() : { results: [] })
         );
@@ -564,4 +544,4 @@ function initializeApp() {
 
 
 // --- Chạy khi DOM sẵn sàng ---
-$(document).ready(initializeApp);  // Gọi hàm khởi tạo initializeApp khi trang đã tải xong.
+$(document).ready(initializeApp);  
