@@ -4,7 +4,7 @@ const mediaId = urlParams.get('id');
 const mediaType = urlParams.get('mediaType');
 
 async function fetchMediaDetails() {
-    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}?api_key=${apiKey}&language=en`;
+    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}?api_key=${apiKey}&language=vi`;
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -14,9 +14,9 @@ async function fetchMediaDetails() {
             : 'https://via.placeholder.com/500x750?text=No+Image';
 
         document.getElementById('movie-poster').src = posterUrl;
-        document.getElementById('movie-title').textContent = data.title || data.name || 'Unknown Title';
-        document.getElementById('movie-overview').textContent = data.overview || 'No overview available.';
-        document.getElementById('movie-release-date').textContent = data.release_date || 'N/A';
+        document.getElementById('movie-title').textContent = data.title || data.name || 'N/A';
+        document.getElementById('movie-overview').textContent = data.overview || 'N/A';
+        document.getElementById('movie-release-date').textContent = data.first_air_date || 'N/A';
         document.getElementById('movie-rating').textContent = data.vote_average || 'N/A';
 
         // Thời lượng phim
@@ -25,14 +25,14 @@ async function fetchMediaDetails() {
             runtimeText = data.runtime ? `${data.runtime} minutes` : 'N/A';
         } else if (mediaType === "tv") {
             runtimeText = data.episode_run_time && data.episode_run_time.length > 0
-                ? `${data.episode_run_time[0]} minutes per episode`
+                ? `${data.episode_run_time[0]} phút mỗi tập`
                 : 'N/A';
         }
         document.getElementById('movie-runtime').textContent = runtimeText;
 
         // Số tập phim (chỉ áp dụng cho TV series)
         if (mediaType === "tv") {
-            const episodesText = data.number_of_episodes ? `${data.number_of_episodes} episodes` : 'N/A';
+            const episodesText = data.number_of_episodes ? `${data.number_of_episodes} tập` : 'N/A';
             document.getElementById('movie-episodes').textContent = episodesText;
         }
 
@@ -129,7 +129,7 @@ if (searchForm && searchInput) {
 // ...existing code...
 
 async function fetchRelatedMovies() {
-    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/recommendations?api_key=${apiKey}&language=en`;
+    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/recommendations?api_key=${apiKey}&language=vi`;
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -156,7 +156,7 @@ async function fetchRelatedMovies() {
 }
 
 async function fetchCastDetails() {
-    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/credits?api_key=${apiKey}&language=en`;
+    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/credits?api_key=${apiKey}&language=vi`;
     try {
         const response = await fetch(url);
         const data = await response.json();

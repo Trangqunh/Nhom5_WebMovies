@@ -5,7 +5,7 @@ const mediaType = urlParams.get('mediaType');
 
 // Hàm lấy chi tiết phim để cập nhật tiêu đề
 async function fetchMovieDetails() {
-    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}?api_key=${apiKey}&language=en`;
+    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}?api_key=${apiKey}&language=vi`;
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -92,7 +92,7 @@ if (searchForm && searchInput) {
     });
 }
 async function fetchEpisodes() {
-    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}?api_key=${apiKey}&language=en`;
+    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}?api_key=${apiKey}&language=vi`;
     try {
         const response = await fetch(url);
         const data = await response.json();
