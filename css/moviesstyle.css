@@ -1,6 +1,6 @@
 body {
-    padding-top: 80px;
-    /* Tăng giá trị này để đảm bảo nội dung không bị che */
+    padding-top: 62px !important;
+    /* đảm bảo nội dung không bị che */
 }
 
 /*1. Navbar Styles */

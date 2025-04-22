@@ -155,21 +155,46 @@ async function fetchRelatedMovies() {
     }
 }
 
-// Add scrolling functionality for related movies
-document.getElementById('btn-prev').addEventListener('click', () => {
-    const relatedMoviesList = document.getElementById('related-movies-list');
-    relatedMoviesList.scrollBy({ left: -300, behavior: 'smooth' });
-});
+async function fetchCastDetails() {
+    const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/credits?api_key=${apiKey}&language=en`;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const cast = data.cast || [];
+        const castList = document.getElementById('cast-list');
 
-document.getElementById('btn-next').addEventListener('click', () => {
-    const relatedMoviesList = document.getElementById('related-movies-list');
-    relatedMoviesList.scrollBy({ left: 300, behavior: 'smooth' });
-});
+        castList.innerHTML = ''; // Clear existing content
+
+        cast.slice(0, 10).forEach(actor => { // Hiển thị tối đa 10 diễn viên
+            const castItem = document.createElement('div');
+            castItem.style.textAlign = 'center';
+
+            const img = document.createElement('img');
+            img.src = actor.profile_path
+                ? `https://image.tmdb.org/t/p/w200${actor.profile_path}`
+                : 'https://via.placeholder.com/100x100?text=No+Image';
+            img.alt = actor.name || 'Unknown';
+            img.title = actor.name || 'Unknown';
+
+            const name = document.createElement('div');
+            name.className = 'cast-name';
+            name.textContent = actor.name || 'Unknown';
+
+            castItem.appendChild(img);
+            castItem.appendChild(name);
+            castList.appendChild(castItem);
+        });
+    } catch (error) {
+        console.error("Error fetching cast details:", error);
+    }
+}
+
 
 // Call fetchRelatedMovies on page load
 window.onload = () => {
     fetchMediaDetails();
     fetchRelatedMovies();
+    fetchCastDetails();
 };
 
 // ...existing code...

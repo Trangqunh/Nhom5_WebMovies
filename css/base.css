@@ -15,5 +15,29 @@ body {
   background-color: var(--color-main);
   color: var(--color-text);
   font-family: Arial, sans-serif;
-  padding-top: 10px; 
+  padding-top: 10px;
+}
+
+/* Tùy chỉnh thanh cuộn */
+::-webkit-scrollbar {
+  width: 10px;
+  /* Độ rộng của thanh cuộn */
+  height: 7px;
+  /* Độ cao của thanh cuộn ngang */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ffc107;
+  /* Màu của thanh kéo */
+  border-radius: 5px;
+  /* Bo tròn góc */
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  /* Viền xung quanh thanh kéo */
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.1);
+  /* Màu nền của track */
+  border-radius: 5px;
+  /* Bo tròn góc */
 }
