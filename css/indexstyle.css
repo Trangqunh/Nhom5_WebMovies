@@ -382,11 +382,6 @@ h4 {
 
 
 /*3. Category Sections (Danh mục phim theo thể loại/tiêu chí - Trang chủ) */
-/* --- Container chung cho các section danh mục --- */
-#category-sections {
-  /* margin-top: 40px; Bỏ vì đã có padding-top body */
-}
-
 /* --- Style chung cho mỗi section danh mục --- */
 .category-section {
   margin-bottom: 45px;
