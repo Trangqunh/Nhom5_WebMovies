@@ -11,9 +11,9 @@ h4 {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 100; 
-  background-color: var(--color-one); 
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); 
+  z-index: 100;
+  background-color: var(--color-one);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 /* --- Các mục link trong Navbar --- */
 .navbar-nav .nav-link {
@@ -67,16 +67,16 @@ h4 {
   border: none;
   border-radius: 20px;
   color: var(--color-text);
-  padding: 6px 20px; 
-  font-size: 1rem; 
+  padding: 6px 20px;
+  font-size: 1rem;
 }
 /* --- Chữ gợi ý (placeholder) trong ô tìm kiếm --- */
 .form-control::placeholder {
   color: #a29999;
 }
 #search-form button {
-  background-color: transparent; 
-  border: none; 
+  background-color: transparent;
+  border: none;
   padding: 8px;
   display: flex;
   align-items: center;
@@ -85,7 +85,7 @@ h4 {
 
 #search-form button i {
   font-size: 1.2rem;
-  color: var(--color-text); 
+  color: var(--color-text);
 }
 #search-form button:hover i {
   color: #F8C100;
@@ -124,51 +124,77 @@ h4 {
   font-weight: bold;
   margin-bottom: 1rem;
 }
-/* Movie Grid */
+/* Movie Grid (cho phần lọc) */
 .movie-grid {
   margin-top: 1rem;
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* 6 cards per row */
-  gap: 1.5rem; /* Spacing between cards */
+  /* Điều chỉnh số cột cho phù hợp với màn hình */
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Cho phép nhiều cột hơn */
+  gap: 1rem; /* Giảm khoảng cách */
 }
 
 /* Movie Item */
 /* Căn chỉnh thẻ phim */
 .movie-card {
-  margin: 0; /* Remove extra margin to align with grid */
+  margin: 0;
+  /* Thêm border mặc định trong suốt để không bị nhảy layout khi hover */
+  border: 2px solid transparent;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s;
+  /* Cập nhật transition để bao gồm border-color và box-shadow */
+  transition: border-color 0.25s ease-in-out, box-shadow 0.25s ease-in-out, transform 0.25s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-one);
+  border-radius: 8px; /* Giữ bo góc tổng thể */
+  overflow: hidden;
 }
 
 .movie-card:hover {
-  transform: scale(1.08); /* Đồng bộ hiệu ứng hover với trang cartoon */
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); /* Tăng nhẹ shadow */
+  /* Thêm border màu vàng khi hover */
+  border-color: var(--color-two); 
+  z-index: 2; /* Vẫn giữ để đảm bảo thẻ hover nổi lên trên */
+  transform: scale(1.05);
 }
 
+/* Link bao quanh thẻ */
+.movie-card a.movie-item {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Đảm bảo link chiếm hết thẻ */
+}
+
+/* Ảnh trong thẻ */
 .movie-card img {
   width: 100%;
-  height: 300px; /* Fixed height for consistency */
-  border-radius: 8px;
-  object-fit: cover; /* Ensure the image fits properly */
-  background-color: #222; /* Add background for missing images */
+  height: auto; 
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  background-color: #222; 
   display: block;
 }
 
-.movie-grid .movie-card img {
-  width: 100%;
-  height: 300px; /* Set a fixed height for consistency */
-  border-radius: 8px;
-  object-fit: cover; /* Ensure the image fits properly */
-}
-
-.movie-title {
-  font-family: 'Roboto', sans-serif; /* Đổi font chữ */
-  font-size: 0.9rem;
+/* Tiêu đề trong thẻ */
+.movie-card .movie-title {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.85rem;
   font-weight: bold;
-  margin-top: 0.5rem;
+  margin-top: auto; /* Đẩy tiêu đề xuống dưới cùng nếu thẻ cao hơn */
+  padding: 8px 10px; 
   text-align: center;
   color: var(--color-text);
+  /* Xử lý tràn chữ */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.5em; /* Đảm bảo đủ chỗ cho 2 dòng title */
+  display: flex;       /* Căn giữa nội dung title theo chiều dọc */
+  align-items: center;
+  justify-content: center;
 }
+
 
 /*2. Hero Section */
 /* --- Khu vực Hero chính --- */
@@ -195,7 +221,7 @@ h4 {
   left: 0;
   width: 100%;
   padding: 40px;
-  background: linear-gradient(to bottom, rgb(15 0 0 / 0%), rgb(19 0 0));
+  background: linear-gradient(to bottom, rgba(15, 0, 0, 0), rgb(19, 0, 0));
 }
 
 /* --- Tiêu đề phim/TV show trong Hero --- */
@@ -351,11 +377,10 @@ h4 {
 }
 
 
-
-/*3. Category Sections (Danh mục phim theo thể loại/tiêu chí) */
+/*3. Category Sections (Danh mục phim theo thể loại/tiêu chí - Trang chủ) */
 /* --- Container chung cho các section danh mục --- */
 #category-sections {
-  margin-top: 40px;
+  /* margin-top: 40px; Bỏ vì đã có padding-top body */
 }
 
 /* --- Style chung cho mỗi section danh mục --- */
@@ -379,52 +404,6 @@ h4 {
   font-size: 1.6rem;
   margin-bottom: 0;
   text-align: left;
-}
-
-/* Thêm style cho tiêu đề lọc khi lọc thể loại/quốc gia */
-.category-filter-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: bold;
-  color: var(--color-two);
-  margin: 2rem 0 2rem 0;
-  gap: 1.5rem;
-}
-
-.category-filter-title::before,
-.category-filter-title::after {
-  content: "";
-  flex: 1;
-  border-bottom: 2px solid var(--color-two);
-  opacity: 0.4;
-}
-
-/* Tiêu đề lọc thể loại/quốc gia giống tvseries */
-.category-filter-title {
-  text-align: center;
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: var(--color-two) !important;
-  margin: 2.5rem 0 0.7rem 0;
-  letter-spacing: 0.5px;
-  background: none;
-  border: none;
-  padding: 0;
-  line-height: 1.2;
-  font-family: inherit;
-  display: block;
-}
-
-/* Gạch ngang dưới tiêu đề lọc */
-.category-filter-divider {
-  border: none;
-  border-top: 1px solid #f5f5f5;
-  opacity: 0.3;
-  margin: 0 auto 0 auto;
-  width: 100%;
 }
 
 /* --- Container chứa nút Prev/Next của danh mục --- */
@@ -466,14 +445,14 @@ h4 {
 .category-carousel .item {
     padding: 0 5px;
 }
-/* --- Nội dung phim trong item danh mục (thẻ .movie-item) --- */
+/* --- Nội dung phim trong item danh mục (thẻ .movie-item bên trong thẻ a) --- */
 .category-carousel .movie-item {
   background-color: transparent;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: none;
   transition: transform 0.3s ease;
-  margin-bottom: 10px;
+  margin-bottom: 10px; /* Khoảng cách dưới tiêu đề */
   display: block;
 }
 /* --- Hover nội dung phim danh mục --- */
@@ -491,24 +470,20 @@ h4 {
   background-color: #222;
 }
 
-/* --- Tiêu đề phim dưới poster trong danh mục --- */
-.category-carousel .movie-item .title {
+/* --- Tiêu đề phim dưới poster trong danh mục (div.movie-title) --- */
+.category-carousel .movie-item .movie-title {
   padding: 8px 0px;
-  text-align: left;
+  text-align: center; /* Căn giữa tiêu đề */
   font-size: 0.9rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--color-text); /* Thêm màu cho tiêu đề */
+  margin-top: 0.5rem; /* Reset margin-top nếu .movie-title dùng chung */
 }
-/* --- Link tiêu đề phim danh mục --- */
-.category-carousel .movie-item .title a {
-  color: var(--color-text);
-  text-decoration: none;
-  font-weight: 500;
-}
-/* --- Hover link tiêu đề phim danh mục --- */
-.category-carousel .movie-item .title a:hover {
-  color: var(--color-two);
+/* --- Chữ đậm trong tiêu đề --- */
+.category-carousel .movie-item .movie-title b {
+  font-weight: 500; /* Giảm độ đậm */
 }
 
 /* --- Tắt nút điều hướng mặc định của Owl Carousel --- */
@@ -519,6 +494,91 @@ h4 {
 .owl-carousel .owl-dots {
     margin-top: 15px;
 }
+
+/* --- Styles cho giao diện lọc (khi click vào thể loại/quốc gia) --- */
+/* Tiêu đề lọc */
+.category-filter-title {
+  text-align: center;
+  font-size: 1.4rem; /* Giảm nhẹ font size */
+  font-weight: bold;
+  color: var(--color-two) !important;
+  margin-top: 3rem; /* Tăng khoảng cách phía trên (cách navbar) */
+  margin-bottom: 1rem; /* Giữ hoặc điều chỉnh khoảng cách phía dưới */
+  letter-spacing: 0.5px;
+}
+
+/* Gạch ngang dưới tiêu đề lọc */
+.category-filter-divider {
+  border: none;
+  border-top: 1px solid #f5f5f5;
+  opacity: 0.3;
+  margin: 0 auto 2rem auto; /* Tăng margin dưới */
+  width: 100%;
+}
+
+/* --- START: Filter Bar Styles --- */
+.filter-bar {
+    background-color: #2a2a2a; /* Màu nền tối hơn một chút */
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 30px; /* Khoảng cách với grid kết quả */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.filter-bar .form-select {
+    background-color: #444; /* Nền dropdown */
+    color: #eee; /* Chữ trong dropdown */
+    border: 1px solid #555; /* Viền dropdown */
+    font-size: 0.9rem; /* Cỡ chữ nhỏ hơn */
+    padding: 8px 28px 8px 12px; /* Tăng padding-right để chứa mũi tên */
+    height: auto; /* Reset chiều cao mặc định */
+    border-radius: 5px;
+     /* Tùy chỉnh mũi tên dropdown (có thể cần prefix cho trình duyệt khác) */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23cccccc' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; /* Loại bỏ style mặc định của trình duyệt */
+}
+
+.filter-bar .form-select:focus {
+    border-color: var(--color-two); /* Màu viền khi focus */
+    box-shadow: 0 0 0 0.2rem rgba(248, 193, 0, 0.25); /* Hiệu ứng focus */
+    background-color: #444; /* Giữ nền khi focus */
+    color: #eee; /* Giữ màu chữ khi focus */
+}
+
+.filter-bar .btn-warning {
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    font-weight: bold;
+    height: calc(1.5em + 1rem + 2px); /* Làm cho nút cao bằng select */
+    display: flex; /* Căn giữa chữ trong nút */
+    align-items: center;
+    justify-content: center;
+}
+
+/* Responsive cho thanh filter */
+@media (max-width: 767px) {
+    .filter-bar .row > div {
+        margin-bottom: 10px; /* Thêm khoảng cách giữa các select trên mobile */
+    }
+    .filter-bar .btn-warning {
+        width: 100%; /* Nút chiếm toàn bộ chiều rộng trên mobile */
+    }
+     /* Đảm bảo các select chiếm đủ không gian */
+    .filter-bar .col-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    .filter-bar .col-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+/* --- END: Filter Bar Styles --- */
 
 
 /*4. Footer Styles */
@@ -735,55 +795,51 @@ h4 {
     #hero-carousel .overlay h3 { font-size: 1.8rem; }
     #hero-carousel .overlay p.hero-overview { max-width: 70%; font-size: 0.9rem; }
     .hero-metadata { font-size: 0.85rem; gap: 8px; }
-    .movie-grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
+    /* Grid */
+    .movie-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
 }
 
 /* --- Tablet đứng (<= 768px) --- */
 @media (max-width: 768px) {
-  .movie-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem; /* Giảm khoảng cách giữa các thẻ phim trên màn hình nhỏ */
-  }
-  .movie-card img,
-  .movie-grid .movie-card img {
-    height: 220px;
-  }
-  #hero-carousel .item { height: 450px; }
-  #hero-carousel .overlay { padding: 30px; }
-  #hero-carousel .overlay h3 { font-size: 1.6rem; }
-  .hero-metadata { font-size: 0.8rem; gap: 6px; }
-  .hero-metadata .star-icon { font-size: 0.7rem; }
-  .hero-metadata span.age-rating { font-size: 0.7rem; padding: 1px 4px; }
-  #hero-carousel .overlay p.hero-overview { font-size: 0.85rem; max-width: 85%; margin-bottom: 15px; line-height: 1.5; }
-  #hero-carousel .overlay .btn-hero-detail { padding: 8px 15px; font-size: 0.85rem; }
-  #hero-carousel .owl-nav { padding: 0 15px; }
-  #hero-carousel .owl-nav button.owl-prev, #hero-carousel .owl-nav button.owl-next { width: 40px; height: 40px; }
-  #hero-carousel .owl-prev-icon, #hero-carousel .owl-next-icon { line-height: 40px; font-size: 20px; }
+    body { padding-top: 70px; /* Điều chỉnh padding nếu navbar thay đổi */ }
+    /* Hero */
+    #hero-carousel .item { height: 450px; }
+    #hero-carousel .overlay { padding: 30px; }
+    #hero-carousel .overlay h3 { font-size: 1.6rem; }
+    .hero-metadata { font-size: 0.8rem; gap: 6px; }
+    .hero-metadata .star-icon { font-size: 0.7rem; }
+    .hero-metadata span.age-rating { font-size: 0.7rem; padding: 1px 4px; }
+    #hero-carousel .overlay p.hero-overview { font-size: 0.85rem; max-width: 85%; margin-bottom: 15px; line-height: 1.5; }
+    #hero-carousel .overlay .btn-hero-detail { padding: 8px 15px; font-size: 0.85rem; }
+    #hero-carousel .owl-nav { padding: 0 15px; }
+    #hero-carousel .owl-nav button.owl-prev, #hero-carousel .owl-nav button.owl-next { width: 40px; height: 40px; }
+    #hero-carousel .owl-prev-icon, #hero-carousel .owl-next-icon { line-height: 40px; font-size: 20px; }
+    /* Grid */
+    .movie-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
 }
 
 /* --- Mobile (<= 576px) --- */
 @media (max-width: 576px) {
-  .movie-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.7rem; /* Giảm thêm khoảng cách giữa các thẻ phim trên màn hình rất nhỏ */
-  }
-  .movie-card img,
-  .movie-grid .movie-card img {
-    height: 180px;
-  }
-  .navbar { padding: 15px 20px; }
-  .navbar-brand { font-size: 20px; }
-  #hero-carousel .item { height: 400px; }
-  #hero-carousel .overlay { padding: 20px; }
-  #hero-carousel .overlay h3 { font-size: 1.4rem; }
-  #hero-carousel .overlay p.hero-overview { max-width: 95%; font-size: 0.8rem; margin-bottom: 12px; }
-  .newsletter-form { flex-direction: column; }
-  .footer-menu { justify-content: center; margin-top: 15px; gap: 15px; }
-  .copyright-area { text-align: center; }
-  .copyright-area .col-md-6 { width: 100%; }
-  .copyright-area .col-md-6:last-child { margin-top: 10px; }
+    /* Navbar */
+    .navbar { padding: 10px 15px; } /* Giảm padding navbar */
+    .navbar-brand { font-size: 20px; }
+    .navbar .form-control { font-size: 0.9rem; padding: 5px 15px;}
+    #search-form button i { font-size: 1rem; }
+    /* Hero */
+    #hero-carousel .item { height: 400px; }
+    #hero-carousel .overlay { padding: 20px; }
+    #hero-carousel .overlay h3 { font-size: 1.4rem; }
+    #hero-carousel .overlay p.hero-overview { max-width: 95%; font-size: 0.8rem; margin-bottom: 12px; }
+    /* Grid */
+    .movie-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.7rem; }
+    .movie-card .movie-title { font-size: 0.75rem; min-height: 2em; }
+    /* Footer */
+    .footer-section { padding: 40px 0 15px; margin-top: 40px; }
+    .newsletter-form { flex-direction: column; }
+    .footer-menu { justify-content: center; margin-top: 15px; gap: 15px; }
+    .copyright-area { text-align: center; }
+    .copyright-area .col-md-6 { width: 100%; }
+    .copyright-area .col-md-6:last-child { margin-top: 10px; }
 }
 
 /* Đảm bảo footer luôn ở cuối trang */
