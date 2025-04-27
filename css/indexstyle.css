@@ -154,7 +154,11 @@ h4 {
   /* Thêm border màu vàng khi hover */
   border-color: var(--color-two); 
   z-index: 2; /* Vẫn giữ để đảm bảo thẻ hover nổi lên trên */
-  transform: scale(1.05);
+}
+
+/* --- Hover RIÊNG cho Movie Card chỉ KHI NẰM TRONG .movie-grid (Thêm hiệu ứng Scale) --- */
+.movie-grid .movie-card:hover {
+  transform: scale(1.05); 
 }
 
 /* Link bao quanh thẻ */
