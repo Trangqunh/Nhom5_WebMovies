@@ -278,25 +278,33 @@ function filterTvSeries({ genreId = null, countryCode = null }) {
 }
 
 function renderTvSeries(series) {
-  tvseriesListContainer.innerHTML = "";
+  tvseriesListContainer.innerHTML = ""; // Xóa nội dung cũ
   if (!series || series.length === 0) {
-    tvseriesListContainer.innerHTML = '<div class="tvseries-empty-message">Không có TV Series nào để hiển thị.</div>';
+    tvseriesListContainer.innerHTML = '<div class="tvseries-empty-message text-center text-muted p-5">Không có TV Series nào để hiển thị.</div>'; // Cải thiện thông báo
     return;
   }
+
   series.forEach((item) => {
-    const div = document.createElement("div");
-    div.classList.add("col");
-    div.innerHTML = `
-      <div class="card ">
-        <a href="watch.html?id=${item.id}&mediaType=tv" style="text-decoration: none; color: inherit;">
-          <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" class="card-img-top" alt="${item.name}">
-          <div class="card-body">
-            <h5 class="card-title">${item.name}</h5>
-          </div>
+    const { id, backdrop_path, poster_path, name } = item; // TV series dùng 'name'
+    const movieTitle = name || "Không rõ"; // Lấy tên TV series
+    let imagePath = poster_path || backdrop_path; // Ưu tiên poster
+    let imageUrl = imagePath
+      ? `https://image.tmdb.org/t/p/w300${imagePath}` // Dùng w300 giống indexapp
+      : 'https://via.placeholder.com/300x450/222/fff?text=No+Image'; // Placeholder
+
+    const card = document.createElement('div');
+    // Sử dụng class 'movie-card' từ indexstyle.css
+    card.classList.add('movie-card');
+    card.innerHTML = `
+        <a href="watch.html?id=${id}&mediaType=tv" class="text-decoration-none text-dark movie-item">
+            <img src="${imageUrl}" alt="${movieTitle}" class="img-fluid rounded" loading="lazy"
+                onerror="this.onerror=null;this.src='https://via.placeholder.com/300x450/222/fff?text=Error';">
+            <div class="movie-title mt-2 text-center">
+                <b title="${movieTitle}">${movieTitle}</b>
+            </div>
         </a>
-      </div>
     `;
-    tvseriesListContainer.appendChild(div);
+    tvseriesListContainer.appendChild(card); // Thêm thẻ mới vào container
   });
 }
 

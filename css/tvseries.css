@@ -1,104 +1,60 @@
+/* Điều chỉnh khoảng cách trên của container chính */
 body > .container {
-    margin-top: 20px !important;
-  }
-  #hero-carousel .item {
-    position: relative;
-    background-size: cover;
-    background-position: center;
-    height: 600px; 
-    color: white;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  #hero-carousel h3 {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  #hero-carousel .hero-overview {
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  #filter-description {
-    text-align: center;
-    font-size: 40px;
-    font-weight: bold !important;
-    color: var(--color-two) !important;
-  }
-  #cartoon-title {
-    color: var(--color-main) !important;
-    font-size: 30px !important;
-    font-weight: bold !important;
-  }
-  .card {
-    transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s;
-    cursor: pointer;
-    z-index: 1;
-    border-radius: 10px;  
-    overflow: hidden;
-    background: var(--color-main);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-  
-  .card:hover {
-    transform: scale(1.08);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-    z-index: 2;
- }
-  .card img {
-    border-radius: 10px 10px 0 0;
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    background: var(--color-main);
-    display: block;
-  }
-  .card .card-body {
-    padding: 10px;
-    background: var(--color-main);
-    border-radius: 0 0 10px 10px;
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-  .card-title {
-    font-family: 'Arial', sans-serif;
-    font-weight: bold;
-    color: var(--color-text) !important;
-    font-size: 16px !important;
-    margin-bottom: 0;
-    text-align: center;
-  }
+  margin-top: 20px !important;
+}
 
-  /* Responsive: giữ tỷ lệ đồng đều cho card */
-  @media (max-width: 992px) {
-    .card img {
-      height: 220px;
-    }
-  }
-  @media (max-width: 768px) {
-    .card img {
-      height: 180px;
-    }
-  }
-  @media (max-width: 576px) {
-    .card img {
-      height: 140px;
-    }
-  }
+/* --- Hero Section Styles --- */
+#hero-carousel .item {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: 600px;
+  color: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
 
-/* Căn giữa dòng chữ khi không có TV Series */
+#hero-carousel h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+#hero-carousel .hero-overview {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* --- Filter Description Styles --- */
+#filter-description {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold !important;
+  color: var(--color-two) !important;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+}
+
+/* Tiêu đề mặc định "TV Series nổi bật" */
+#tvseries-title {
+  color: var(--color-two);
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+/* --- Style cho thông báo khi không có TV Series --- */
 #tvseries-list .tvseries-empty-message {
+  grid-column: 1 / -1;
+  color: #bbb;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-top: 30px;
+  padding: 30px;
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  min-height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 220px;
-  width: 100%;
-  font-size: 1.1rem;
-  color: #bbb;
-  text-align: center;
 }
